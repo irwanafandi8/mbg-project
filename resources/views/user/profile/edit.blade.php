@@ -1,0 +1,106 @@
+<x-layouts.user title="Profil Sekolah">
+
+    <div class="max-w-4xl mx-auto space-y-6">
+
+        <div class="card">
+            <div class="card-header">
+                <h3 class="font-semibold text-slate-800">Informasi Profil</h3>
+            </div>
+            <div class="card-body">
+                <form action="{{ route('user.profile.update') }}" method="POST" class="space-y-4">
+                    @csrf @method('PUT')
+
+                    <div>
+                        <label for="name" class="form-label block mb-1">Nama</label>
+                        <input type="text" name="name" id="name" class="form-input"
+                            placeholder="Masukkan nama lengkap" value="{{ old('name', $user->name) }}" required>
+                        @error('name')
+                            <p class="text-sm text-red-600 mt-1">{{ $message }}</p>
+                        @enderror
+                    </div>
+
+                    <div>
+                        <label for="email" class="form-label block mb-1">Email</label>
+                        <input type="email" name="email" id="email" class="form-input"
+                            placeholder="contoh@email.com" value="{{ old('email', $user->email) }}" required>
+                        @error('email')
+                            <p class="text-sm text-red-600 mt-1">{{ $message }}</p>
+                        @enderror
+                    </div>
+
+                    <div>
+                        <label for="phone" class="form-label block mb-1">Nomor Telepon</label>
+                        <input type="text" name="phone" id="phone" class="form-input"
+                            placeholder="Contoh: 081234567890" value="{{ old('phone', $user->phone) }}">
+                    </div>
+
+                    @if ($user->school)
+                        <div class="p-4 bg-slate-50 border border-slate-100 rounded-xl mt-4">
+                            <p class="font-semibold text-slate-800 mb-2">Informasi Sekolah Terkait</p>
+                            <div class="grid grid-cols-2 gap-4 text-sm">
+                                <div>
+                                    <p class="text-slate-500">Nama Sekolah</p>
+                                    <p class="text-slate-800">{{ $user->school->name }}</p>
+                                </div>
+                                <div>
+                                    <p class="text-slate-500">NPSN</p>
+                                    <p class="text-slate-800">{{ $user->school->npsn }}</p>
+                                </div>
+                                <div class="col-span-2">
+                                    <p class="text-slate-500">Dapur MBG</p>
+                                    <p class="text-slate-800">
+                                        {{ $user->school->kitchen?->name ?? 'Belum ada dapur yang ditugaskan.' }}</p>
+                                </div>
+                            </div>
+                        </div>
+                    @endif
+
+                    <div class="pt-4 border-t border-slate-100 flex justify-end">
+                        <button type="submit" class="btn-primary">Simpan Profil</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header">
+                <h3 class="font-semibold text-slate-800">Ubah Password</h3>
+            </div>
+            <div class="card-body">
+                <form action="{{ route('user.profile.password') }}" method="POST" class="space-y-4">
+                    @csrf @method('PUT')
+
+                    <div>
+                        <label for="current_password" class="form-label block mb-1">Password Saat Ini</label>
+                        <input type="password" name="current_password" id="current_password" class="form-input"
+                            placeholder="Masukkan password saat ini" required>
+                        @error('current_password')
+                            <p class="text-sm text-red-600 mt-1">{{ $message }}</p>
+                        @enderror
+                    </div>
+
+                    <div>
+                        <label for="password" class="form-label block mb-1">Password Baru</label>
+                        <input type="password" name="password" id="password" class="form-input"
+                            placeholder="Masukkan password baru" required>
+                        @error('password')
+                            <p class="text-sm text-red-600 mt-1">{{ $message }}</p>
+                        @enderror
+                    </div>
+
+                    <div>
+                        <label for="password_confirmation" class="form-label block mb-1">Konfirmasi Password
+                            Baru</label>
+                        <input type="password" name="password_confirmation" id="password_confirmation"
+                            class="form-input" placeholder="Ulangi password baru" required>
+                    </div>
+
+                    <div class="pt-4 border-t border-slate-100 flex justify-end">
+                        <button type="submit" class="btn-success">Ubah Password</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+</x-layouts.user>

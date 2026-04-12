@@ -1,0 +1,175 @@
+<x-layouts.app :title="$title ?? ''">
+    <div class="flex h-full min-h-screen">
+        {{-- Sidebar --}}
+        <aside class="sidebar -translate-x-full lg:translate-x-0 transition-transform duration-300" id="sidebar">
+            {{-- Logo --}}
+            <div class="flex items-center gap-2 px-5 py-5 border-b border-white/10">
+               <img src="{{ asset('images/logo-bgn.png') }}" class="h-12 w-12" alt="logo-bgn">
+                <div>
+                    <p class="text-white font-bold text-sm leading-tight">SPPG MBG</p>
+                    <p class="text-blue-200 text-xs truncate max-w-28">{{ auth()->user()->school?->name ?? 'Sekolah' }}
+                    </p>
+                </div>
+            </div>
+
+            {{-- Navigation --}}
+            <nav class="flex-1 py-4 overflow-y-auto">
+                <p class="text-blue-300 text-xs font-semibold uppercase tracking-wider px-6 mb-2">Menu Utama</p>
+
+                <a href="{{ route('user.dashboard') }}"
+                    class="sidebar-link {{ request()->routeIs('user.dashboard') ? 'active' : '' }}">
+                    <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                            d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+                    </svg>
+                    <span>Dashboard</span>
+                </a>
+
+                <a href="{{ route('user.complaints.index') }}"
+                    class="sidebar-link {{ request()->routeIs('user.complaints.*') ? 'active' : '' }}">
+                    <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                            d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+                    </svg>
+                    <span>Aduan Saya</span>
+                </a>
+
+                <a href="{{ route('user.suggestions.index') }}"
+                    class="sidebar-link {{ request()->routeIs('user.suggestions.*') ? 'active' : '' }}">
+                    <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                            d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+                    </svg>
+                    <span>Saran</span>
+                </a>
+
+                <div class="my-3 mx-4 border-t border-white/10"></div>
+
+                <p class="text-blue-300 text-xs font-semibold uppercase tracking-wider px-6 mb-2">Akun</p>
+                <a href="{{ route('user.profile.edit') }}"
+                    class="sidebar-link {{ request()->routeIs('user.profile.*') ? 'active' : '' }}">
+                    <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                            d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                    </svg>
+                    <span>Profil</span>
+                </a>
+            </nav>
+
+            {{-- User info & logout --}}
+            <div class="p-4 border-t border-white/10">
+                <div class="flex items-center gap-3 mb-3 px-2">
+                    <div
+                        class="w-9 h-9 bg-white/20 rounded-full flex items-center justify-center text-white font-semibold text-sm shrink-0">
+                        {{ substr(auth()->user()->name, 0, 1) }}
+                    </div>
+                    <div class="min-w-0">
+                        <p class="text-white text-sm font-medium truncate">{{ auth()->user()->name }}</p>
+                        <p class="text-blue-300 text-xs truncate">{{ auth()->user()->email }}</p>
+                    </div>
+                </div>
+                <form method="POST" action="{{ route('logout') }}">
+                    @csrf
+                    <button type="submit"
+                        class="w-full flex items-center gap-2 px-4 py-2 rounded-lg text-red-300 hover:bg-red-500/20 hover:text-red-100 text-sm font-medium transition-colors duration-200">
+                        <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"
+                            stroke-width="1.8">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+                        </svg>
+                        <span>Keluar</span>
+                    </button>
+                </form>
+            </div>
+        </aside>
+
+        {{-- Main Content --}}
+        <div class="flex-1 flex flex-col min-w-0 lg:ml-64 transition-all duration-300">
+            {{-- Topbar --}}
+            <header class="topbar">
+                <div class="flex items-center gap-3">
+                    <button id="sidebarToggle"
+                        class="btn-icon text-slate-500 hover:text-slate-700 hover:bg-slate-100 lg:hidden">
+                        <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"
+                            stroke-width="1.8">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16" />
+                        </svg>
+                    </button>
+                    <div>
+                        <h1 class="text-lg font-semibold text-slate-800">{{ $title ?? 'Dashboard' }}</h1>
+                        @isset($breadcrumb)
+                            <p class="text-xs text-slate-500">{{ $breadcrumb }}</p>
+                        @endisset
+                    </div>
+                </div>
+                <div class="flex items-center gap-3">
+                    <div
+                        class="w-9 h-9 bg-blue-600 rounded-full flex items-center justify-center text-white font-semibold text-sm">
+                        {{ substr(auth()->user()->name, 0, 1) }}
+                    </div>
+                </div>
+            </header>
+
+            {{-- Flash Messages --}}
+            <div class="px-4 sm:px-6 pt-4">
+                @if (session('success'))
+                    <div class="alert-success animate-fade-in mb-4" id="flash-success">
+                        <svg class="w-5 h-5 text-emerald-600 shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24"
+                            stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                        <p>{{ session('success') }}</p>
+                    </div>
+                @endif
+                @if (session('error'))
+                    <div class="alert-error animate-fade-in mb-4">
+                        <svg class="w-5 h-5 text-red-600 shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24"
+                            stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                        <p>{{ session('error') }}</p>
+                    </div>
+                @endif
+            </div>
+
+            {{-- Page Content --}}
+            <main class="flex-1 px-4 sm:px-6 py-4 animate-fade-in">
+                {{ $slot }}
+            </main>
+
+            {{-- Footer --}}
+            <footer class="px-4 sm:px-6 py-3 border-t border-slate-200 text-xs text-slate-400">
+                &copy; {{ date('Y') }} SPPG MBG - Sistem Pengaduan Program Makan Bergizi Gratis
+            </footer>
+        </div>
+
+        <div id="sidebarBackdrop" class="fixed inset-0 bg-slate-900/40 z-40 hidden lg:hidden"></div>
+    </div>
+
+    @stack('modals')
+
+    <script>
+        const flash = document.getElementById('flash-success');
+        if (flash) setTimeout(() => flash.style.display = 'none', 5000);
+        const toggle = document.getElementById('sidebarToggle');
+        const sidebar = document.getElementById('sidebar');
+        const backdrop = document.getElementById('sidebarBackdrop');
+
+        const closeSidebar = () => {
+            sidebar.classList.add('-translate-x-full');
+            backdrop?.classList.add('hidden');
+        };
+
+        if (toggle) {
+            toggle.addEventListener('click', () => {
+                sidebar.classList.toggle('-translate-x-full');
+                backdrop?.classList.toggle('hidden');
+            });
+        }
+
+        backdrop?.addEventListener('click', closeSidebar);
+    </script>
+    @stack('scripts')
+</x-layouts.app>
