@@ -51,15 +51,31 @@ class User extends Authenticatable
     }
 
     /**
-     * Check if user is admin.
+     * Check if user is super admin.
+     */
+    public function isSuperAdmin(): bool
+    {
+        return $this->role === UserRole::SUPER_ADMIN;
+    }
+
+    /**
+     * Check if user is admin (including super admin).
      */
     public function isAdmin(): bool
+    {
+        return in_array($this->role, [UserRole::SUPER_ADMIN, UserRole::ADMIN]);
+    }
+
+    /**
+     * Check if user is school admin (admin sekolah only, not super admin).
+     */
+    public function isSchoolAdmin(): bool
     {
         return $this->role === UserRole::ADMIN;
     }
 
     /**
-     * Check if user is school user.
+     * Check if user is school user (siswa/orang tua).
      */
     public function isUser(): bool
     {

@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Admin;
+use App\Http\Controllers\SuperAdmin;
 use App\Http\Controllers\User;
 use Illuminate\Support\Facades\Route;
 
@@ -21,15 +22,24 @@ Route::post('/logout', [LoginController::class, 'logout'])->name('logout')->midd
 
 /*
 |--------------------------------------------------------------------------
-| Admin Routes
+| Super Admin Routes
 |--------------------------------------------------------------------------
 */
-Route::prefix('admin')
-    ->name('admin.')
-    ->middleware(['auth', 'role:admin'])
+Route::prefix('super-admin')
+    ->name('super_admin.')
+    ->middleware(['auth', 'role:super_admin'])
     ->group(function () {
         // Dashboard
-        Route::get('/dashboard', [Admin\DashboardController::class, 'index'])->name('dashboard');
+        Route::get('/dashboard', [SuperAdmin\DashboardController::class, 'index'])->name('dashboard');
+
+        // Admin Management (admin sekolah)
+        Route::get('/admins', [SuperAdmin\AdminController::class, 'index'])->name('admins.index');
+        Route::get('/admins/create', [SuperAdmin\AdminController::class, 'create'])->name('admins.create');
+        Route::post('/admins', [SuperAdmin\AdminController::class, 'store'])->name('admins.store');
+        Route::get('/admins/{user}/edit', [SuperAdmin\AdminController::class, 'edit'])->name('admins.edit');
+        Route::put('/admins/{user}', [SuperAdmin\AdminController::class, 'update'])->name('admins.update');
+        Route::patch('/admins/{user}/toggle-status', [SuperAdmin\AdminController::class, 'toggleStatus'])->name('admins.toggle-status');
+        Route::delete('/admins/{user}', [SuperAdmin\AdminController::class, 'destroy'])->name('admins.destroy');
 
         // Complaints
         Route::get('/complaints', [Admin\ComplaintController::class, 'index'])->name('complaints.index');
@@ -62,10 +72,9 @@ Route::prefix('admin')
         Route::put('/schools/{school}', [Admin\SchoolController::class, 'update'])->name('schools.update');
         Route::delete('/schools/{school}', [Admin\SchoolController::class, 'destroy'])->name('schools.destroy');
 
-        // Users
+        // Users (siswa/orang tua)
         Route::get('/users', [Admin\UserController::class, 'index'])->name('users.index');
         Route::get('/users/create', [Admin\UserController::class, 'create'])->name('users.create');
-        Route::get('/users/create-admin', [Admin\UserController::class, 'createAdmin'])->name('users.create-admin');
         Route::post('/users', [Admin\UserController::class, 'store'])->name('users.store');
         Route::get('/users/{user}/edit', [Admin\UserController::class, 'edit'])->name('users.edit');
         Route::put('/users/{user}', [Admin\UserController::class, 'update'])->name('users.update');
@@ -88,7 +97,55 @@ Route::prefix('admin')
 
 /*
 |--------------------------------------------------------------------------
-| User (School) Routes
+| Admin Routes (Admin Sekolah)
+|--------------------------------------------------------------------------
+*/
+Route::prefix('admin')
+    ->name('admin.')
+    ->middleware(['auth', 'role:admin'])
+    ->group(function () {
+        // Dashboard
+        Route::get('/dashboard', [Admin\DashboardController::class, 'index'])->name('dashboard');
+
+        // Complaints (admin sekolah hanya bisa lihat, tidak bisa ubah status)
+        Route::get('/complaints', [Admin\ComplaintController::class, 'index'])->name('complaints.index');
+        Route::get('/complaints/{complaint}', [Admin\ComplaintController::class, 'show'])->name('complaints.show');
+
+        // Categories (admin sekolah hanya bisa lihat, tidak bisa CRUD)
+        Route::get('/categories', [Admin\CategoryController::class, 'index'])->name('categories.index');
+
+        // Kitchens (Dapur MBG) (admin sekolah hanya bisa lihat)
+        Route::get('/kitchens', [Admin\KitchenController::class, 'index'])->name('kitchens.index');
+
+        // Schools (admin sekolah hanya bisa lihat)
+        Route::get('/schools', [Admin\SchoolController::class, 'index'])->name('schools.index');
+
+        // Users (siswa/orang tua only - admin sekolah bisa kelola user di sekolahnya)
+        Route::get('/users', [Admin\UserController::class, 'index'])->name('users.index');
+        Route::get('/users/create', [Admin\UserController::class, 'create'])->name('users.create');
+        Route::post('/users', [Admin\UserController::class, 'store'])->name('users.store');
+        Route::get('/users/{user}/edit', [Admin\UserController::class, 'edit'])->name('users.edit');
+        Route::put('/users/{user}', [Admin\UserController::class, 'update'])->name('users.update');
+        Route::patch('/users/{user}/toggle-status', [Admin\UserController::class, 'toggleStatus'])->name('users.toggle-status');
+        Route::delete('/users/{user}', [Admin\UserController::class, 'destroy'])->name('users.destroy');
+
+        // Suggestions
+        Route::get('/suggestions', [Admin\SuggestionController::class, 'index'])->name('suggestions.index');
+        Route::patch('/suggestions/{suggestion}/mark-read', [Admin\SuggestionController::class, 'markRead'])->name('suggestions.mark-read');
+        Route::post('/suggestions/mark-all-read', [Admin\SuggestionController::class, 'markAllRead'])->name('suggestions.mark-all-read');
+
+        // Profile
+        Route::get('/profile', [\App\Http\Controllers\ProfileController::class, 'edit'])->name('profile.edit');
+        Route::put('/profile', [\App\Http\Controllers\ProfileController::class, 'update'])->name('profile.update');
+        Route::put('/profile/password', [\App\Http\Controllers\ProfileController::class, 'updatePassword'])->name('profile.password');
+
+        // Audit Logs
+        Route::get('/audit-logs', [Admin\AuditLogController::class, 'index'])->name('audit-logs.index');
+    });
+
+/*
+|--------------------------------------------------------------------------
+| User (Siswa/Orang Tua) Routes
 |--------------------------------------------------------------------------
 */
 Route::prefix('user')

@@ -1,4 +1,4 @@
-<x-layouts.admin title="Dapur MBG">
+<x-layouts.admin title="Dapur MBG" breadcrumb="Daftar dapur MBG">
 
     <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4 mb-6">
         <div class="stat-card">
@@ -69,12 +69,14 @@
                     <button type="submit" class="btn-secondary btn-sm">Cari</button>
                 </form>
 
+                @if (auth()->user()->isSuperAdmin())
                 <a href="{{ route('admin.kitchens.create') }}" class="btn-primary btn-sm">
                     <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" />
                     </svg>
                     Tambah Dapur
                 </a>
+                @endif
             </div>
         </div>
 
@@ -88,7 +90,9 @@
                         <th>Kapasitas Produksi</th>
                         <th>Sekolah</th>
                         <th>Status</th>
+                        @if (auth()->user()->isSuperAdmin())
                         <th>Aksi</th>
+                        @endif
                     </tr>
                 </thead>
                 <tbody>
@@ -110,6 +114,7 @@
                                     {{ $kitchen->operational_status->label() }}
                                 </span>
                             </td>
+                            @if (auth()->user()->isSuperAdmin())
                             <td class="flex items-center gap-1">
                                 <a href="{{ route('admin.kitchens.show', $kitchen) }}"
                                     class="btn-icon text-blue-600 hover:bg-blue-50" title="Detail">
@@ -143,10 +148,11 @@
                                     </button>
                                 </form>
                             </td>
+                            @endif
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="8">
+                            <td colspan="{{ auth()->user()->isSuperAdmin() ? 8 : 7 }}">
                                 <div class="empty-state">
                                     <svg fill="none" viewBox="0 0 24 24" stroke="currentColor"
                                         stroke-width="1.2">
@@ -154,7 +160,9 @@
                                             d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5" />
                                     </svg>
                                     <h3>Belum ada dapur</h3>
+                                    @if (auth()->user()->isSuperAdmin())
                                     <p>Klik tombol Tambah Dapur untuk membuat data baru.</p>
+                                    @endif
                                 </div>
                             </td>
                         </tr>

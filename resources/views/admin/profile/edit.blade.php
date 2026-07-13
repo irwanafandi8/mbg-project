@@ -1,4 +1,4 @@
-<x-layouts.admin title="Profil Admin" breadcrumb="Kelola informasi akun Anda">
+<x-layouts.admin title="Profil" breadcrumb="Kelola informasi akun Anda">
 
     <div class="max-w-4xl mx-auto space-y-6">
 
@@ -7,13 +7,17 @@
                 <h3 class="font-semibold text-slate-800">Informasi Profil</h3>
             </div>
             <div class="card-body">
-                <form action="{{ route('admin.profile.update') }}" method="POST" class="space-y-4">
+                @php
+                    $profileUpdateRoute = auth()->user()->isSuperAdmin() ? 'super_admin.profile.update' : 'admin.profile.update';
+                    $passwordUpdateRoute = auth()->user()->isSuperAdmin() ? 'super_admin.profile.password' : 'admin.profile.password';
+                @endphp
+                <form action="{{ route($profileUpdateRoute) }}" method="POST" class="space-y-4">
                     @csrf @method('PUT')
 
                     <div>
-                        <label for="name" class="form-label block mb-1">Nama Admin</label>
+                        <label for="name" class="form-label block mb-1">Nama</label>
                         <input type="text" name="name" id="name" class="form-input"
-                            placeholder="Masukkan nama admin" value="{{ old('name', $user->name) }}" required>
+                            placeholder="Masukkan nama" value="{{ old('name', $user->name) }}" required>
                         @error('name')
                             <p class="text-sm text-red-600 mt-1">{{ $message }}</p>
                         @enderror
@@ -49,7 +53,7 @@
                 <h3 class="font-semibold text-slate-800">Ubah Password</h3>
             </div>
             <div class="card-body">
-                <form action="{{ route('admin.profile.password') }}" method="POST" class="space-y-4">
+                <form action="{{ route($passwordUpdateRoute) }}" method="POST" class="space-y-4">
                     @csrf @method('PUT')
 
                     <div>

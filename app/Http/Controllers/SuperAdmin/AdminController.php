@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Admin;
+namespace App\Http\Controllers\SuperAdmin;
 
 use App\Enums\UserRole;
 use App\Http\Controllers\Controller;
@@ -12,28 +12,14 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\View\View;
 
-class UserController extends Controller
+class AdminController extends Controller
 {
     /**
-     * List all users.
+     * List all admin (sekolah) users.
      */
     public function index(Request $request): View
     {
-        $query = User::with('school')->latest();
-
-        // School admin can only see user (siswa/orang tua)
-        if (auth()->user()->isSchoolAdmin()) {
-            $query->where('role', UserRole::USER->value);
-        }
-
-        if ($request->filled('role')) {
-            // School admin cannot filter by admin role
-            if (auth()->user()->isSchoolAdmin() && $request->role === 'admin') {
-                $query->where('role', UserRole::USER->value);
-            } else {
-                $query->where('role', $request->role);
-            }
-        }
+        $query = User::where('role', UserRole::ADMIN->value)->with('school')->latest();
 
         if ($request->filled('search')) {
             $query->where(function ($q) use ($request) {
@@ -46,34 +32,25 @@ class UserController extends Controller
             $query->where('school_id', $request->school_id);
         }
 
-        $users = $query->paginate(10)->withQueryString();
+        $admins = $query->paginate(10)->withQueryString();
         $schools = School::where('is_active', true)->orderBy('name')->get();
         $totalAdmins = User::where('role', UserRole::ADMIN->value)->count();
-        $totalSchoolUsers = User::where('role', UserRole::USER->value)->count();
 
-        return view('admin.users.index', compact('users', 'schools', 'totalAdmins', 'totalSchoolUsers'));
+        return view('super-admin.admins.index', compact('admins', 'schools', 'totalAdmins'));
     }
 
     /**
-     * Show create school administrator form.
+     * Show create admin form.
      */
     public function create(): View
     {
         $schools = School::where('is_active', true)->orderBy('name')->get();
 
-        return view('admin.users.create', compact('schools'));
+        return view('super-admin.admins.create', compact('schools'));
     }
 
     /**
-     * Show create super admin form.
-     */
-    public function createAdmin(): View
-    {
-        return view('admin.users.create-admin');
-    }
-
-    /**
-     * Store a new user.
+     * Store a new admin.
      */
     public function store(Request $request): RedirectResponse
     {
@@ -81,15 +58,11 @@ class UserController extends Controller
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'email', 'unique:users,email'],
             'password' => ['required', 'string', 'min:8', 'confirmed'],
-            'role' => ['required', 'in:admin,user'],
-            'school_id' => ['required_if:role,user', 'nullable', 'exists:schools,id'],
+            'school_id' => ['required', 'exists:schools,id'],
             'phone' => ['nullable', 'string', 'max:20'],
         ]);
 
-        if ($validated['role'] === UserRole::ADMIN->value) {
-            $validated['school_id'] = null;
-        }
-
+        $validated['role'] = UserRole::ADMIN->value;
         $validated['password'] = Hash::make($validated['password']);
 
         $user = User::create($validated);
@@ -99,20 +72,29 @@ class UserController extends Controller
             'role' => $user->role->value,
         ]);
 
-        return redirect()->route('admin.users.index')
-            ->with('success', 'Pengguna berhasil ditambahkan.');
+        return redirect()->route('super_admin.admins.index')
+            ->with('success', 'Admin sekolah berhasil ditambahkan.');
     }
 
     /**
-     * Update a user.
+     * Show edit admin form.
+     */
+    public function edit(User $user): View
+    {
+        $schools = School::where('is_active', true)->orderBy('name')->get();
+
+        return view('super-admin.admins.edit', compact('user', 'schools'));
+    }
+
+    /**
+     * Update an admin.
      */
     public function update(Request $request, User $user): RedirectResponse
     {
         $rules = [
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'email', "unique:users,email,{$user->id}"],
-            'role' => ['required', 'in:admin,user'],
-            'school_id' => ['required_if:role,user', 'nullable', 'exists:schools,id'],
+            'school_id' => ['required', 'exists:schools,id'],
             'phone' => ['nullable', 'string', 'max:20'],
             'is_active' => ['boolean'],
         ];
@@ -122,10 +104,6 @@ class UserController extends Controller
         }
 
         $validated = $request->validate($rules);
-
-        if ($validated['role'] === UserRole::ADMIN->value) {
-            $validated['school_id'] = null;
-        }
 
         if (!isset($validated['is_active'])) {
             $validated['is_active'] = false;
@@ -144,22 +122,12 @@ class UserController extends Controller
             'role' => $user->role->value,
         ]);
 
-        return redirect()->route('admin.users.index')
-            ->with('success', 'Pengguna berhasil diperbarui.');
+        return redirect()->route('super_admin.admins.index')
+            ->with('success', 'Admin sekolah berhasil diperbarui.');
     }
 
     /**
-     * Show edit user form.
-     */
-    public function edit(User $user): View
-    {
-        $schools = School::where('is_active', true)->orderBy('name')->get();
-
-        return view('admin.users.edit', compact('user', 'schools'));
-    }
-
-    /**
-     * Toggle user active status.
+     * Toggle admin active status.
      */
     public function toggleStatus(Request $request, User $user): RedirectResponse
     {
@@ -169,11 +137,11 @@ class UserController extends Controller
 
         $user->update(['is_active' => !$user->is_active]);
 
-        return back()->with('success', 'Status pengguna berhasil diperbarui.');
+        return back()->with('success', 'Status admin berhasil diperbarui.');
     }
 
     /**
-     * Delete a user.
+     * Delete an admin.
      */
     public function destroy(Request $request, User $user): RedirectResponse
     {
@@ -182,13 +150,13 @@ class UserController extends Controller
         }
 
         if ($user->complaints()->exists()) {
-            return back()->with('error', 'Pengguna tidak dapat dihapus karena masih memiliki aduan.');
+            return back()->with('error', 'Admin tidak dapat dihapus karena masih memiliki aduan.');
         }
 
         AuditLog::log('delete_user', User::class, $user->id, ['name' => $user->name], null);
         $user->delete();
 
-        return redirect()->route('admin.users.index')
-            ->with('success', 'Pengguna berhasil dihapus.');
+        return redirect()->route('super_admin.admins.index')
+            ->with('success', 'Admin sekolah berhasil dihapus.');
     }
 }

@@ -180,11 +180,12 @@
 
             <div>
                 <div class="card h-full">
+                    @if (auth()->user()->isSuperAdmin())
                     <div class="card-header">
                         <h3 class="font-semibold text-slate-800">Perbarui Status</h3>
                     </div>
                     <div class="card-body">
-                        <form method="POST" action="{{ route('admin.complaints.update-status', $complaint) }}">
+                        <form method="POST" action="{{ route('super_admin.complaints.update-status', $complaint) }}">
                             @csrf
                             @method('PATCH')
 
@@ -218,6 +219,20 @@
                             </button>
                         </form>
                     </div>
+                    @else
+                    <div class="card-header">
+                        <h3 class="font-semibold text-slate-800">Status Aduan</h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="text-center py-4">
+                            <span class="badge {{ $complaint->status->bgClass() }} text-base px-4 py-2">
+                                <span class="badge-dot {{ $complaint->status->dotClass() }}"></span>
+                                {{ $complaint->status->label() }}
+                            </span>
+                            <p class="text-sm text-slate-500 mt-3">Status aduan hanya dapat diperbarui oleh Super Admin.</p>
+                        </div>
+                    </div>
+                    @endif
                 </div>
             </div>
         </div>

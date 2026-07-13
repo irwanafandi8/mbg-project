@@ -1,4 +1,4 @@
-<x-layouts.admin title="Kategori Aduan" breadcrumb="Kelola kategori jenis pengaduan">
+<x-layouts.admin title="Kategori Aduan" breadcrumb="Daftar kategori jenis pengaduan">
 
     <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
         <div class="stat-card">
@@ -42,12 +42,14 @@
                     <input name="search" value="{{ request('search') }}" placeholder="Cari kategori..." class="w-56">
                 </form>
 
+                @if (auth()->user()->isSuperAdmin())
                 <a href="{{ route('admin.categories.create') }}" class="btn-primary btn-sm">
                     <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" />
                     </svg>
                     Tambah Kategori
                 </a>
+                @endif
             </div>
         </div>
 
@@ -60,7 +62,9 @@
                         <th>Jumlah Aduan</th>
                         <th>Deskripsi Singkat</th>
                         <th>Status</th>
+                        @if (auth()->user()->isSuperAdmin())
                         <th>Aksi</th>
+                        @endif
                     </tr>
                 </thead>
                 <tbody>
@@ -79,6 +83,7 @@
                                     {{ $category->is_active ? 'Aktif' : 'Nonaktif' }}
                                 </span>
                             </td>
+                            @if (auth()->user()->isSuperAdmin())
                             <td class="flex items-center gap-1">
                                 <a href="{{ route('admin.categories.edit', $category) }}"
                                     class="btn-icon text-blue-600 hover:bg-blue-50" title="Edit">
@@ -116,17 +121,20 @@
                                     </button>
                                 </form>
                             </td>
+                            @endif
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="6">
+                            <td colspan="{{ auth()->user()->isSuperAdmin() ? 6 : 5 }}">
                                 <div class="empty-state">
                                     <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.2">
                                         <path stroke-linecap="round" stroke-linejoin="round"
                                             d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.585l7 7a2 2 0 010 2.83l-7 7a2 2 0 01-2.83 0l-7-7A2 2 0 013 12V7a4 4 0 014-4z" />
                                     </svg>
                                     <h3>Belum ada kategori</h3>
+                                    @if (auth()->user()->isSuperAdmin())
                                     <p>Klik tombol Tambah Kategori untuk membuat kategori baru.</p>
+                                    @endif
                                 </div>
                             </td>
                         </tr>

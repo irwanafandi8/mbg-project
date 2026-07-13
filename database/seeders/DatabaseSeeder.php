@@ -18,12 +18,12 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // 1. Create Admin
+        // 1. Create Super Admin
         User::create([
             'name' => 'Super Admin MBG',
-            'email' => 'admin@mbg.go.id',
+            'email' => 'superadmin@mbg.go.id',
             'password' => Hash::make('password'),
-            'role' => UserRole::ADMIN,
+            'role' => UserRole::SUPER_ADMIN,
             'is_active' => true,
         ]);
 
@@ -95,44 +95,69 @@ class DatabaseSeeder extends Seeder
             Kitchen::create($kData);
         }
 
-        // 4. Create Schools & Users
+        // 4. Create Schools
         $schools = [
             [
                 'name' => 'SDN 01 Kebayoran Lama',
                 'npsn' => '20101231',
                 'address' => 'Jl. Kebayoran No. 1, Jakarta Selatan',
                 'kitchen_id' => 1,
-                'email' => 'sdn01keby@sch.id',
+                'admin_email' => 'admin.sdn01@sch.id',
+                'admin_name' => 'Pak Budi Santoso',
             ],
             [
                 'name' => 'SMPN 45 Jakarta',
                 'npsn' => '20104567',
                 'address' => 'Jl. Tebet Timur No. 10, Jakarta Selatan',
                 'kitchen_id' => 2,
-                'email' => 'smpn45jkt@sch.id',
+                'admin_email' => 'admin.smpn45@sch.id',
+                'admin_name' => 'Ibu Ratna Dewi',
             ],
             [
                 'name' => 'SMAN 38 Jakarta',
                 'npsn' => '20108910',
                 'address' => 'Jl. Lenteng Agung No. 5, Jakarta Selatan',
                 'kitchen_id' => 3,
-                'email' => 'sman38jkt@sch.id',
+                'admin_email' => 'admin.sman38@sch.id',
+                'admin_name' => 'Pak Drs. Hadi Susilo',
             ],
         ];
 
         foreach ($schools as $sData) {
-            $schoolEmail = $sData['email'];
-            unset($sData['email']);
-            
+            $adminEmail = $sData['admin_email'];
+            $adminName = $sData['admin_name'];
+            unset($sData['admin_email'], $sData['admin_name']);
+
             $school = School::create($sData);
 
-            // Create User for school
+            // Create Admin Sekolah
             User::create([
-                'name' => 'Admin ' . $school->name,
-                'email' => $schoolEmail,
+                'name' => $adminName,
+                'email' => $adminEmail,
+                'password' => Hash::make('password'),
+                'role' => UserRole::ADMIN,
+                'school_id' => $school->id,
+                'is_active' => true,
+            ]);
+
+            // Create User (Siswa/Orang Tua) for each school
+            User::create([
+                'name' => 'Andi Saputra (Wali Murid)',
+                'email' => "andi.{$school->npsn}@gmail.com",
                 'password' => Hash::make('password'),
                 'role' => UserRole::USER,
                 'school_id' => $school->id,
+                'phone' => '081234567890',
+                'is_active' => true,
+            ]);
+
+            User::create([
+                'name' => 'Siti Rahmawati (Siswa)',
+                'email' => "siti.{$school->npsn}@gmail.com",
+                'password' => Hash::make('password'),
+                'role' => UserRole::USER,
+                'school_id' => $school->id,
+                'phone' => '081298765432',
                 'is_active' => true,
             ]);
         }

@@ -1,4 +1,4 @@
-<x-layouts.admin title="Manajemen Sekolah">
+<x-layouts.admin title="Sekolah" breadcrumb="Daftar sekolah">
 
     <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4 mb-6">
         <div class="stat-card">
@@ -67,12 +67,14 @@
                     <button class="btn-secondary btn-sm">Cari</button>
                 </form>
 
+                @if (auth()->user()->isSuperAdmin())
                 <a href="{{ route('admin.schools.create') }}" class="btn-primary btn-sm">
                     <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" />
                     </svg>
                     Tambah Sekolah
                 </a>
+                @endif
             </div>
         </div>
 
@@ -85,7 +87,9 @@
                         <th>NPSN</th>
                         <th>Dapur MBG</th>
                         <th>Status</th>
+                        @if (auth()->user()->isSuperAdmin())
                         <th>Aksi</th>
+                        @endif
                     </tr>
                 </thead>
                 <tbody>
@@ -113,6 +117,7 @@
                                     {{ $school->is_active ? 'Aktif' : 'Nonaktif' }}
                                 </span>
                             </td>
+                            @if (auth()->user()->isSuperAdmin())
                             <td class="flex items-center gap-1">
                                 <a href="{{ route('admin.schools.edit', $school) }}"
                                     class="btn-icon text-amber-600 hover:bg-amber-50" title="Edit">
@@ -135,18 +140,20 @@
                                     </button>
                                 </form>
                             </td>
+                            @endif
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="8">
+                            <td colspan="{{ auth()->user()->isSuperAdmin() ? 7 : 6 }}">
                                 <div class="empty-state">
-                                    <svg fill="none" viewBox="0 0 24 24" stroke="currentColor"
-                                        stroke-width="1.2">
+                                    <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.2">
                                         <path stroke-linecap="round" stroke-linejoin="round"
                                             d="M12 14l9-5-9-5-9 5 9 5z" />
                                     </svg>
                                     <h3>Belum ada sekolah</h3>
+                                    @if (auth()->user()->isSuperAdmin())
                                     <p>Klik tombol Tambah Sekolah untuk membuat data baru.</p>
+                                    @endif
                                 </div>
                             </td>
                         </tr>

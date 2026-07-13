@@ -16,7 +16,7 @@ class ProfileController extends Controller
     {
         $user = $request->user();
 
-        if ($user->isAdmin()) {
+        if ($user->isSuperAdmin() || $user->isAdmin()) {
             return view('admin.profile.edit', compact('user'));
         }
 

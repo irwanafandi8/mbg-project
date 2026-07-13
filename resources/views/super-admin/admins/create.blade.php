@@ -1,17 +1,16 @@
-<x-layouts.admin title="Tambah Pengguna">
+<x-layouts.admin title="Tambah Admin Sekolah">
     <div class="max-w-4xl mx-auto">
         <div class="flex items-center gap-3 mb-6">
-            <a href="{{ route('admin.users.index') }}" class="btn-outline btn-sm">Kembali</a>
+            <a href="{{ route('super_admin.admins.index') }}" class="btn-outline btn-sm">Kembali</a>
         </div>
 
         <div class="card">
             <div class="card-header">
-                <h3 class="font-semibold text-slate-800">Form Tambah Pengguna (Siswa/Orang Tua)</h3>
+                <h3 class="font-semibold text-slate-800">Form Tambah Admin Sekolah</h3>
             </div>
             <div class="card-body">
-                <form method="POST" action="{{ route('admin.users.store') }}" class="space-y-4">
+                <form method="POST" action="{{ route('super_admin.admins.store') }}" class="space-y-4">
                     @csrf
-                    <input type="hidden" name="role" value="user">
 
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div>
@@ -58,8 +57,8 @@
                     </div>
 
                     <div class="flex justify-end gap-2 pt-4 border-t border-slate-100">
-                        <a href="{{ route('admin.users.index') }}" class="btn-outline">Batal</a>
-                        <button type="submit" class="btn-primary">Simpan Pengguna</button>
+                        <a href="{{ route('super_admin.admins.index') }}" class="btn-outline">Batal</a>
+                        <button type="submit" class="btn-primary">Simpan Admin Sekolah</button>
                     </div>
                 </form>
             </div>

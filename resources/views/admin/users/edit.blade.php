@@ -12,6 +12,7 @@
                 <form method="POST" action="{{ route('admin.users.update', $user) }}" class="space-y-4">
                     @csrf
                     @method('PUT')
+                    <input type="hidden" name="role" value="user">
 
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div>
@@ -28,17 +29,6 @@
 
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div>
-                            <label class="form-label">Peran</label>
-                            <select name="role" id="role" class="form-select mt-1"
-                                onchange="toggleSchoolField()">
-                                <option value="user"
-                                    {{ old('role', $user->role->value) === 'user' ? 'selected' : '' }}>Administrator
-                                    Sekolah</option>
-                                <option value="admin"
-                                    {{ old('role', $user->role->value) === 'admin' ? 'selected' : '' }}>Admin</option>
-                            </select>
-                        </div>
-                        <div id="schoolField">
                             <label class="form-label">Sekolah</label>
                             <select name="school_id" class="form-select mt-1">
                                 <option value="">-- Pilih Sekolah --</option>
@@ -49,12 +39,11 @@
                                 @endforeach
                             </select>
                         </div>
-                    </div>
-
-                    <div>
-                        <label class="form-label">No. Telepon</label>
-                        <input type="text" name="phone" value="{{ old('phone', $user->phone) }}"
-                            placeholder="Contoh: 081234567890" class="form-input mt-1">
+                        <div>
+                            <label class="form-label">No. Telepon</label>
+                            <input type="text" name="phone" value="{{ old('phone', $user->phone) }}"
+                                placeholder="Contoh: 081234567890" class="form-input mt-1">
+                        </div>
                     </div>
 
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -85,16 +74,4 @@
             </div>
         </div>
     </div>
-
-    @push('scripts')
-        <script>
-            function toggleSchoolField() {
-                const role = document.getElementById('role').value;
-                const schoolField = document.getElementById('schoolField');
-                schoolField.style.display = role === 'admin' ? 'none' : 'block';
-            }
-
-            toggleSchoolField();
-        </script>
-    @endpush
 </x-layouts.admin>

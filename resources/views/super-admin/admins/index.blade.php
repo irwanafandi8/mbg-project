@@ -1,24 +1,24 @@
-<x-layouts.admin title="Manajemen Pengguna" breadcrumb="Kelola akun pengguna (siswa/orang tua)">
+<x-layouts.admin title="Manajemen Admin Sekolah" breadcrumb="Kelola akun admin sekolah">
 
     <div class="grid grid-cols-1 md:grid-cols-1 gap-4 mb-6">
         <div class="stat-card">
-            <div class="stat-icon bg-pink-100">
-                <svg class="w-6 h-6 text-pink-600" fill="none" viewBox="0 0 24 24" stroke="currentColor"
+            <div class="stat-icon bg-purple-100">
+                <svg class="w-6 h-6 text-purple-600" fill="none" viewBox="0 0 24 24" stroke="currentColor"
                     stroke-width="1.8">
                     <path stroke-linecap="round" stroke-linejoin="round"
-                        d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+                        d="M5.121 17.804A9 9 0 1118.879 6.196M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
                 </svg>
             </div>
             <div>
-                <p class="text-xs text-slate-500">Pengguna (Siswa/Orang Tua)</p>
-                <p class="text-2xl font-bold text-slate-800">{{ $totalSchoolUsers }}</p>
+                <p class="text-xs text-slate-500">Total Admin Sekolah</p>
+                <p class="text-2xl font-bold text-slate-800">{{ $totalAdmins }}</p>
             </div>
         </div>
     </div>
 
     <div class="card">
         <div class="card-header gap-3 flex-wrap">
-            <h3 class="font-semibold text-slate-800">Daftar Pengguna</h3>
+            <h3 class="font-semibold text-slate-800">Daftar Admin Sekolah</h3>
             <div class="flex items-center gap-2 flex-wrap">
                 <form method="GET" class="flex gap-2 flex-wrap">
                     <div class="search-bar">
@@ -41,7 +41,7 @@
                     <button class="btn-secondary btn-sm">Cari</button>
                 </form>
 
-                <a href="{{ route('admin.users.create') }}" class="btn-primary btn-sm">Tambah Pengguna</a>
+                <a href="{{ route('super_admin.admins.create') }}" class="btn-primary btn-sm">Tambah Admin Sekolah</a>
             </div>
         </div>
 
@@ -60,28 +60,28 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @forelse($users as $index => $user)
+                    @forelse($admins as $index => $admin)
                         <tr>
-                            <td class="text-slate-500">{{ $users->firstItem() + $index }}</td>
+                            <td class="text-slate-500">{{ $admins->firstItem() + $index }}</td>
                             <td>
                                 <div class="flex items-center gap-3">
-                                    <span class="font-medium">{{ $user->name }}</span>
+                                    <span class="font-medium">{{ $admin->name }}</span>
                                 </div>
                             </td>
-                            <td class="text-slate-500">{{ $user->email }}</td>
-                            <td class="whitespace-nowrap">{{ $user->school?->name ?? '-' }}</td>
-                            <td class="text-slate-500">{{ $user->phone ?? '-' }}</td>
+                            <td class="text-slate-500">{{ $admin->email }}</td>
+                            <td class="whitespace-nowrap">{{ $admin->school?->name ?? '-' }}</td>
+                            <td class="text-slate-500">{{ $admin->phone ?? '-' }}</td>
                             <td class="text-xs text-slate-500">
-                                {{ $user->last_login_at ? $user->last_login_at->diffForHumans() : 'Belum pernah' }}
+                                {{ $admin->last_login_at ? $admin->last_login_at->diffForHumans() : 'Belum pernah' }}
                             </td>
                             <td>
                                 <span
-                                    class="badge {{ $user->is_active ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700' }}">
-                                    {{ $user->is_active ? 'Aktif' : 'Nonaktif' }}
+                                    class="badge {{ $admin->is_active ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700' }}">
+                                    {{ $admin->is_active ? 'Aktif' : 'Nonaktif' }}
                                 </span>
                             </td>
                             <td class="flex items-center gap-1">
-                                <a href="{{ route('admin.users.edit', $user) }}"
+                                <a href="{{ route('super_admin.admins.edit', $admin) }}"
                                     class="btn-icon text-amber-600 hover:bg-amber-50" title="Edit">
                                     <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"
                                         stroke-width="2">
@@ -90,12 +90,12 @@
                                     </svg>
                                 </a>
 
-                                <form method="POST" action="{{ route('admin.users.toggle-status', $user) }}">
+                                <form method="POST" action="{{ route('super_admin.admins.toggle-status', $admin) }}">
                                     @csrf
                                     @method('PATCH')
                                     <button type="submit"
-                                        class="btn-icon {{ $user->is_active ? 'text-slate-500 hover:bg-slate-100' : 'text-emerald-600 hover:bg-emerald-50' }}"
-                                        title="{{ $user->is_active ? 'Nonaktifkan' : 'Aktifkan' }}">
+                                        class="btn-icon {{ $admin->is_active ? 'text-slate-500 hover:bg-slate-100' : 'text-emerald-600 hover:bg-emerald-50' }}"
+                                        title="{{ $admin->is_active ? 'Nonaktifkan' : 'Aktifkan' }}">
                                         <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"
                                             stroke-width="2">
                                             <path stroke-linecap="round" stroke-linejoin="round"
@@ -104,8 +104,8 @@
                                     </button>
                                 </form>
 
-                                <form method="POST" action="{{ route('admin.users.destroy', $user) }}"
-                                    onsubmit="return confirm('Hapus pengguna ini?')">
+                                <form method="POST" action="{{ route('super_admin.admins.destroy', $admin) }}"
+                                    onsubmit="return confirm('Hapus admin ini?')">
                                     @csrf
                                     @method('DELETE')
                                     <button type="submit" class="btn-icon text-red-500 hover:bg-red-50" title="Hapus">
@@ -125,10 +125,10 @@
                                     <svg fill="none" viewBox="0 0 24 24" stroke="currentColor"
                                         stroke-width="1.2">
                                         <path stroke-linecap="round" stroke-linejoin="round"
-                                            d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2a3 3 0 015.356-1.857" />
+                                            d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2a3 3 0 00-5.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2a3 3 0 015.356-1.857" />
                                     </svg>
-                                    <h3>Belum ada pengguna</h3>
-                                    <p>Klik "Tambah Pengguna" untuk menambahkan pengguna baru.</p>
+                                    <h3>Belum ada admin sekolah</h3>
+                                    <p>Klik "Tambah Admin Sekolah" untuk menambahkan admin baru.</p>
                                 </div>
                             </td>
                         </tr>
@@ -137,8 +137,8 @@
             </table>
         </div>
 
-        @if ($users->hasPages())
-            <div class="px-6 py-4 border-t border-slate-100">{{ $users->links() }}</div>
+        @if ($admins->hasPages())
+            <div class="px-6 py-4 border-t border-slate-100">{{ $admins->links() }}</div>
         @endif
     </div>
 

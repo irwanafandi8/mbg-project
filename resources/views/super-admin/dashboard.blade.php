@@ -1,16 +1,16 @@
-<x-layouts.admin title="Dashboard">
+<x-layouts.admin title="Dashboard Super Admin">
 
     {{-- Welcome Banner --}}
-    <div class="bg-blue-800 rounded-2xl p-6 mb-6 text-white flex items-center justify-between overflow-hidden relative">
+    <div class="bg-gradient-to-r from-purple-800 to-blue-800 rounded-2xl p-6 mb-6 text-white flex items-center justify-between overflow-hidden relative">
         <div class="absolute right-0 top-0 w-48 h-48 bg-white/5 rounded-full -translate-y-16 translate-x-16"></div>
         <div class="relative">
-            <span class="text-blue-200 text-sm mb-1">Selamat Datang Kembali, Administrator</span>
+            <span class="text-purple-200 text-sm mb-1">Selamat Datang, Super Admin</span>
             <h2 class="text-xl font-bold">{{ auth()->user()->name }}</h2>
-            <p class="text-blue-200 text-sm font-semibold mt-1">{{ now()->translatedFormat('l, d F Y') }}</p>
+            <p class="text-purple-200 text-sm font-semibold mt-1">{{ now()->translatedFormat('l, d F Y') }}</p>
         </div>
         <div class="relative hidden md:block">
             <div class="text-right">
-                <p class="text-blue-200 text-sm">Waktu Rata-rata Penyelesaian</p>
+                <p class="text-purple-200 text-sm">Waktu Rata-rata Penyelesaian</p>
                 <p class="text-3xl font-bold">{{ $avgResolution }} Jam</p>
             </div>
         </div>
@@ -29,7 +29,7 @@
             <div>
                 <p class="text-xs text-slate-500 font-medium">Total Aduan</p>
                 <p class="text-2xl font-bold text-slate-800">{{ number_format($stats['total']) }}</p>
-                <a href="{{ route('admin.complaints.index') }}" class="text-xs text-blue-600 hover:underline">Lihat
+                <a href="{{ route('super_admin.complaints.index') }}" class="text-xs text-blue-600 hover:underline">Lihat
                     semua</a>
             </div>
         </div>
@@ -45,7 +45,7 @@
             <div>
                 <p class="text-xs text-slate-500 font-medium">Belum Ditangani</p>
                 <p class="text-2xl font-bold text-slate-800">{{ number_format($stats['unresolved']) }}</p>
-                <a href="{{ route('admin.complaints.index', ['status' => 'pending']) }}"
+                <a href="{{ route('super_admin.complaints.index', ['status' => 'pending']) }}"
                     class="text-xs text-yellow-600 hover:underline">Lihat</a>
             </div>
         </div>
@@ -61,7 +61,7 @@
             <div>
                 <p class="text-xs text-slate-500 font-medium">Diproses</p>
                 <p class="text-2xl font-bold text-slate-800">{{ number_format($stats['in_progress']) }}</p>
-                <a href="{{ route('admin.complaints.index', ['status' => 'in_progress']) }}"
+                <a href="{{ route('super_admin.complaints.index', ['status' => 'in_progress']) }}"
                     class="text-xs text-orange-600 hover:underline">Lihat</a>
             </div>
         </div>
@@ -77,14 +77,14 @@
             <div>
                 <p class="text-xs text-slate-500 font-medium">Selesai</p>
                 <p class="text-2xl font-bold text-slate-800">{{ number_format($stats['resolved']) }}</p>
-                <a href="{{ route('admin.complaints.index', ['status' => 'resolved']) }}"
+                <a href="{{ route('super_admin.complaints.index', ['status' => 'resolved']) }}"
                     class="text-xs text-emerald-600 hover:underline">Lihat</a>
             </div>
         </div>
     </div>
 
     {{-- Stat Cards Row 2 : Users/Schools/Kitchens --}}
-    <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4 mb-6">
+    <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-5 gap-4 mb-6">
         <div class="stat-card">
             <div class="stat-icon bg-cyan-100">
                 <svg class="w-6 h-6 text-cyan-600" fill="none" viewBox="0 0 24 24" stroke="currentColor"
@@ -96,7 +96,7 @@
             <div>
                 <p class="text-xs text-slate-500 font-medium">Total Sekolah</p>
                 <p class="text-2xl font-bold text-slate-800">{{ $totalSchools }}</p>
-                <a href="{{ route('admin.schools.index') }}" class="text-xs text-cyan-600 hover:underline">Kelola</a>
+                <a href="{{ route('super_admin.schools.index') }}" class="text-xs text-cyan-600 hover:underline">Kelola</a>
             </div>
         </div>
 
@@ -111,8 +111,22 @@
             <div>
                 <p class="text-xs text-slate-500 font-medium">Total Dapur MBG</p>
                 <p class="text-2xl font-bold text-slate-800">{{ $totalKitchens }}</p>
-                <a href="{{ route('admin.kitchens.index') }}"
-                    class="text-xs text-indigo-600 hover:underline">Kelola</a>
+                <a href="{{ route('super_admin.kitchens.index') }}" class="text-xs text-indigo-600 hover:underline">Kelola</a>
+            </div>
+        </div>
+
+        <div class="stat-card">
+            <div class="stat-icon bg-purple-100">
+                <svg class="w-6 h-6 text-purple-600" fill="none" viewBox="0 0 24 24" stroke="currentColor"
+                    stroke-width="1.8">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                        d="M5.121 17.804A9 9 0 1118.879 6.196M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                </svg>
+            </div>
+            <div>
+                <p class="text-xs text-slate-500 font-medium">Admin Sekolah</p>
+                <p class="text-2xl font-bold text-slate-800">{{ $totalAdmins }}</p>
+                <a href="{{ route('super_admin.admins.index') }}" class="text-xs text-purple-600 hover:underline">Kelola</a>
             </div>
         </div>
 
@@ -125,9 +139,9 @@
                 </svg>
             </div>
             <div>
-                <p class="text-xs text-slate-500 font-medium">Total Pengguna</p>
-                <p class="text-2xl font-bold text-slate-800">{{ $totalUsers }}</p>
-                <a href="{{ route('admin.users.index') }}" class="text-xs text-pink-600 hover:underline">Kelola</a>
+                <p class="text-xs text-slate-500 font-medium">Pengguna</p>
+                <p class="text-2xl font-bold text-slate-800">{{ $totalSchoolUsers }}</p>
+                <a href="{{ route('super_admin.users.index') }}" class="text-xs text-pink-600 hover:underline">Kelola</a>
             </div>
         </div>
 
@@ -142,8 +156,7 @@
             <div>
                 <p class="text-xs text-slate-500 font-medium">Jumlah Saran</p>
                 <p class="text-2xl font-bold text-slate-800">{{ $totalSuggestions }}</p>
-                <a href="{{ route('admin.suggestions.index') }}"
-                    class="text-xs text-amber-600 hover:underline">Kelola</a>
+                <a href="{{ route('super_admin.suggestions.index') }}" class="text-xs text-amber-600 hover:underline">Kelola</a>
             </div>
         </div>
     </div>
@@ -181,7 +194,7 @@
                             <div class="flex items-center gap-2">
                                 <div class="w-24 h-1.5 bg-slate-100 rounded-full">
                                     @php $pct = $stats['total'] > 0 ? ($cat->complaints_count / $stats['total']) * 100 : 0; @endphp
-                                    <div class="h-1.5 bg-blue-500 rounded-full" style="width: {{ $pct }}%">
+                                    <div class="h-1.5 bg-purple-500 rounded-full" style="width: {{ $pct }}%">
                                     </div>
                                 </div>
                                 <span class="text-slate-500 text-xs w-8 text-right">{{ number_format($pct) }}%</span>
@@ -200,7 +213,7 @@
                 <h3 class="font-semibold text-slate-800">Aduan Terbaru</h3>
                 <p class="text-xs text-slate-500">3 aduan terakhir yang masuk</p>
             </div>
-            <a href="{{ route('admin.complaints.index') }}" class="btn-outline btn-sm">
+            <a href="{{ route('super_admin.complaints.index') }}" class="btn-outline btn-sm">
                 Lihat Semua
             </a>
         </div>
@@ -222,7 +235,7 @@
                         <tr>
                             <td class="text-slate-500">{{ $index + 1 }}</td>
                             <td>
-                                <a href="{{ route('admin.complaints.show', $complaint) }}"
+                                <a href="{{ route('super_admin.complaints.show', $complaint) }}"
                                     class="font-mono text-blue-600 hover:underline text-xs font-semibold">
                                     {{ $complaint->complaint_number }}
                                 </a>
@@ -260,10 +273,10 @@
                     datasets: [{
                         label: 'Jumlah Aduan',
                         data: @json($chartData),
-                        borderColor: '#3b82f6',
-                        backgroundColor: 'rgba(59,130,246,0.08)',
+                        borderColor: '#8b5cf6',
+                        backgroundColor: 'rgba(139,92,246,0.08)',
                         borderWidth: 2.5,
-                        pointBackgroundColor: '#2563eb',
+                        pointBackgroundColor: '#7c3aed',
                         pointRadius: 4,
                         fill: true,
                         tension: 0.4,
@@ -300,7 +313,7 @@
             @php
                 $catLabels = $byCategory->pluck('name')->toArray();
                 $catData = $byCategory->pluck('complaints_count')->toArray();
-                $catColors = ['#3b82f6', '#60a5fa', '#93c5fd', '#0ea5e9', '#06b6d4', '#10b981', '#f59e0b', '#ef4444'];
+                $catColors = ['#8b5cf6', '#a78bfa', '#c4b5fd', '#7c3aed', '#6d28d9', '#10b981', '#f59e0b', '#ef4444'];
             @endphp
             const catCtx = document.getElementById('categoryChart').getContext('2d');
             new Chart(catCtx, {
