@@ -41,7 +41,7 @@
                     <button class="btn-secondary btn-sm">Cari</button>
                 </form>
 
-                <a href="{{ route('admin.users.create') }}" class="btn-primary btn-sm">Tambah Pengguna</a>
+                <a href="{{ admin_route('users.create') }}" class="btn-primary btn-sm">Tambah Pengguna</a>
             </div>
         </div>
 
@@ -81,7 +81,7 @@
                                 </span>
                             </td>
                             <td class="flex items-center gap-1">
-                                <a href="{{ route('admin.users.edit', $user) }}"
+                                <a href="{{ admin_route('users.edit', $user) }}"
                                     class="btn-icon text-amber-600 hover:bg-amber-50" title="Edit">
                                     <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"
                                         stroke-width="2">
@@ -90,7 +90,7 @@
                                     </svg>
                                 </a>
 
-                                <form method="POST" action="{{ route('admin.users.toggle-status', $user) }}">
+                                <form method="POST" action="{{ admin_route('users.toggle-status', $user) }}">
                                     @csrf
                                     @method('PATCH')
                                     <button type="submit"
@@ -104,7 +104,7 @@
                                     </button>
                                 </form>
 
-                                <form method="POST" action="{{ route('admin.users.destroy', $user) }}"
+                                <form method="POST" action="{{ admin_route('users.destroy', $user) }}"
                                     onsubmit="return confirm('Hapus pengguna ini?')">
                                     @csrf
                                     @method('DELETE')

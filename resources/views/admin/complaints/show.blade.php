@@ -1,7 +1,7 @@
 <x-layouts.admin :title="'Aduan #' . $complaint->complaint_number">
 
     <div class="flex items-center gap-3 mb-6 flex-wrap">
-        <a href="{{ route('admin.complaints.index') }}" class="btn-outline btn-sm">
+        <a href="{{ admin_route('complaints.index') }}" class="btn-outline btn-sm">
             <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
             </svg>
@@ -185,7 +185,7 @@
                         <h3 class="font-semibold text-slate-800">Perbarui Status</h3>
                     </div>
                     <div class="card-body">
-                        <form method="POST" action="{{ route('super_admin.complaints.update-status', $complaint) }}">
+                        <form method="POST" action="{{ admin_route('complaints.update-status', $complaint) }}">
                             @csrf
                             @method('PATCH')
 

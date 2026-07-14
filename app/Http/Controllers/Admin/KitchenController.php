@@ -58,7 +58,7 @@ class KitchenController extends Controller
         $kitchen = Kitchen::create($request->validated());
         AuditLog::log('create_kitchen', Kitchen::class, $kitchen->id, null, $kitchen->toArray());
 
-        return redirect()->route('admin.kitchens.index')
+        return redirect()->route(admin_route_name() . '.kitchens.index')
             ->with('success', 'Dapur MBG berhasil ditambahkan.');
     }
 
@@ -105,7 +105,7 @@ class KitchenController extends Controller
         $kitchen->update($validated);
         AuditLog::log('update_kitchen', Kitchen::class, $kitchen->id, $old, $kitchen->fresh()->toArray());
 
-        return redirect()->route('admin.kitchens.index')
+        return redirect()->route(admin_route_name() . '.kitchens.index')
             ->with('success', 'Dapur MBG berhasil diperbarui.');
     }
 
@@ -121,7 +121,7 @@ class KitchenController extends Controller
         AuditLog::log('delete_kitchen', Kitchen::class, $kitchen->id, $kitchen->toArray(), null);
         $kitchen->delete();
 
-        return redirect()->route('admin.kitchens.index')
+        return redirect()->route(admin_route_name() . '.kitchens.index')
             ->with('success', 'Dapur MBG berhasil dihapus.');
     }
 }

@@ -64,7 +64,7 @@ class SchoolController extends Controller
         $school = School::create($request->validated());
         AuditLog::log('create_school', School::class, $school->id, null, $school->toArray());
 
-        return redirect()->route('admin.schools.index')
+        return redirect()->route(admin_route_name() . '.schools.index')
             ->with('success', 'Sekolah berhasil ditambahkan.');
     }
 
@@ -86,7 +86,7 @@ class SchoolController extends Controller
         $school->update($validated);
         AuditLog::log('update_school', School::class, $school->id, $old, $school->fresh()->toArray());
 
-        return redirect()->route('admin.schools.index')
+        return redirect()->route(admin_route_name() . '.schools.index')
             ->with('success', 'Sekolah berhasil diperbarui.');
     }
 
@@ -112,7 +112,7 @@ class SchoolController extends Controller
         AuditLog::log('delete_school', School::class, $school->id, $school->toArray(), null);
         $school->delete();
 
-        return redirect()->route('admin.schools.index')
+        return redirect()->route(admin_route_name() . '.schools.index')
             ->with('success', 'Sekolah berhasil dihapus.');
     }
 }

@@ -78,7 +78,7 @@
                 </select>
                 <button type="submit" class="btn-primary btn-sm">Cari</button>
                 @if (request()->hasAny(['search', 'status', 'kitchen_id', 'category_id']))
-                    <a href="{{ route('admin.complaints.index') }}" class="btn-outline btn-sm">Reset</a>
+                    <a href="{{ admin_route('complaints.index') }}" class="btn-outline btn-sm">Reset</a>
                 @endif
             </form>
         </div>
@@ -124,7 +124,7 @@
                                 </span>
                             </td>
                             <td>
-                                <a href="{{ route('admin.complaints.show', $complaint) }}"
+                                <a href="{{ admin_route('complaints.show', $complaint) }}"
                                     class="btn-icon text-blue-600 hover:bg-blue-50" title="Lihat Detail">
                                     <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"
                                         stroke-width="2">

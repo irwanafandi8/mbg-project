@@ -59,7 +59,7 @@
                 </form>
 
                 @if ($unreadCount > 0)
-                    <form method="POST" action="{{ route('admin.suggestions.mark-all-read') }}">
+                    <form method="POST" action="{{ admin_route('suggestions.mark-all-read') }}">
                         @csrf
                         <button type="submit"
                             class="inline-flex items-center gap-2 px-4 py-2 rounded-lg 
@@ -105,7 +105,7 @@
                     <div class="flex items-center justify-between pt-3 border-t border-slate-100">
                         <span class="text-xs text-slate-400">#{{ $suggestions->firstItem() + $index }}</span>
                         @if (!$suggestion->is_read)
-                            <form method="POST" action="{{ route('admin.suggestions.mark-read', $suggestion) }}">
+                            <form method="POST" action="{{ admin_route('suggestions.mark-read', $suggestion) }}">
                                 @csrf
                                 @method('PATCH')
                                 <button type="submit" class="text-xs text-blue-600 hover:underline">Tandai sudah

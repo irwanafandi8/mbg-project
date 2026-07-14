@@ -29,7 +29,7 @@
             <div>
                 <p class="text-xs text-slate-500 font-medium">Total Aduan</p>
                 <p class="text-2xl font-bold text-slate-800">{{ number_format($stats['total']) }}</p>
-                <a href="{{ route('admin.complaints.index') }}" class="text-xs text-blue-600 hover:underline">Lihat
+                <a href="{{ admin_route('complaints.index') }}" class="text-xs text-blue-600 hover:underline">Lihat
                     semua</a>
             </div>
         </div>
@@ -45,7 +45,7 @@
             <div>
                 <p class="text-xs text-slate-500 font-medium">Belum Ditangani</p>
                 <p class="text-2xl font-bold text-slate-800">{{ number_format($stats['unresolved']) }}</p>
-                <a href="{{ route('admin.complaints.index', ['status' => 'pending']) }}"
+                <a href="{{ admin_route('complaints.index', ['status' => 'pending']) }}"
                     class="text-xs text-yellow-600 hover:underline">Lihat</a>
             </div>
         </div>
@@ -61,7 +61,7 @@
             <div>
                 <p class="text-xs text-slate-500 font-medium">Diproses</p>
                 <p class="text-2xl font-bold text-slate-800">{{ number_format($stats['in_progress']) }}</p>
-                <a href="{{ route('admin.complaints.index', ['status' => 'in_progress']) }}"
+                <a href="{{ admin_route('complaints.index', ['status' => 'in_progress']) }}"
                     class="text-xs text-orange-600 hover:underline">Lihat</a>
             </div>
         </div>
@@ -77,7 +77,7 @@
             <div>
                 <p class="text-xs text-slate-500 font-medium">Selesai</p>
                 <p class="text-2xl font-bold text-slate-800">{{ number_format($stats['resolved']) }}</p>
-                <a href="{{ route('admin.complaints.index', ['status' => 'resolved']) }}"
+                <a href="{{ admin_route('complaints.index', ['status' => 'resolved']) }}"
                     class="text-xs text-emerald-600 hover:underline">Lihat</a>
             </div>
         </div>
@@ -96,7 +96,7 @@
             <div>
                 <p class="text-xs text-slate-500 font-medium">Total Sekolah</p>
                 <p class="text-2xl font-bold text-slate-800">{{ $totalSchools }}</p>
-                <a href="{{ route('admin.schools.index') }}" class="text-xs text-cyan-600 hover:underline">Kelola</a>
+                <a href="{{ admin_route('schools.index') }}" class="text-xs text-cyan-600 hover:underline">Kelola</a>
             </div>
         </div>
 
@@ -111,7 +111,7 @@
             <div>
                 <p class="text-xs text-slate-500 font-medium">Total Dapur MBG</p>
                 <p class="text-2xl font-bold text-slate-800">{{ $totalKitchens }}</p>
-                <a href="{{ route('admin.kitchens.index') }}"
+                <a href="{{ admin_route('kitchens.index') }}"
                     class="text-xs text-indigo-600 hover:underline">Kelola</a>
             </div>
         </div>
@@ -127,7 +127,7 @@
             <div>
                 <p class="text-xs text-slate-500 font-medium">Total Pengguna</p>
                 <p class="text-2xl font-bold text-slate-800">{{ $totalUsers }}</p>
-                <a href="{{ route('admin.users.index') }}" class="text-xs text-pink-600 hover:underline">Kelola</a>
+                <a href="{{ admin_route('users.index') }}" class="text-xs text-pink-600 hover:underline">Kelola</a>
             </div>
         </div>
 
@@ -142,7 +142,7 @@
             <div>
                 <p class="text-xs text-slate-500 font-medium">Jumlah Saran</p>
                 <p class="text-2xl font-bold text-slate-800">{{ $totalSuggestions }}</p>
-                <a href="{{ route('admin.suggestions.index') }}"
+                <a href="{{ admin_route('suggestions.index') }}"
                     class="text-xs text-amber-600 hover:underline">Kelola</a>
             </div>
         </div>
@@ -200,7 +200,7 @@
                 <h3 class="font-semibold text-slate-800">Aduan Terbaru</h3>
                 <p class="text-xs text-slate-500">3 aduan terakhir yang masuk</p>
             </div>
-            <a href="{{ route('admin.complaints.index') }}" class="btn-outline btn-sm">
+            <a href="{{ admin_route('complaints.index') }}" class="btn-outline btn-sm">
                 Lihat Semua
             </a>
         </div>
@@ -222,7 +222,7 @@
                         <tr>
                             <td class="text-slate-500">{{ $index + 1 }}</td>
                             <td>
-                                <a href="{{ route('admin.complaints.show', $complaint) }}"
+                                <a href="{{ admin_route('complaints.show', $complaint) }}"
                                     class="font-mono text-blue-600 hover:underline text-xs font-semibold">
                                     {{ $complaint->complaint_number }}
                                 </a>

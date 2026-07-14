@@ -46,7 +46,7 @@ class CategoryController extends Controller
         $category = ComplaintCategory::create($request->validated());
         AuditLog::log('create_category', ComplaintCategory::class, $category->id, null, $category->toArray());
 
-        return redirect()->route('admin.categories.index')
+        return redirect()->route(admin_route_name() . '.categories.index')
             ->with('success', 'Kategori berhasil ditambahkan.');
     }
 
@@ -67,7 +67,7 @@ class CategoryController extends Controller
         $category->update($validated);
         AuditLog::log('update_category', ComplaintCategory::class, $category->id, $old, $category->fresh()->toArray());
 
-        return redirect()->route('admin.categories.index')
+        return redirect()->route(admin_route_name() . '.categories.index')
             ->with('success', 'Kategori berhasil diperbarui.');
     }
 
@@ -91,7 +91,7 @@ class CategoryController extends Controller
         AuditLog::log('delete_category', ComplaintCategory::class, $category->id, $category->toArray(), null);
         $category->delete();
 
-        return redirect()->route('admin.categories.index')
+        return redirect()->route(admin_route_name() . '.categories.index')
             ->with('success', 'Kategori berhasil dihapus.');
     }
 

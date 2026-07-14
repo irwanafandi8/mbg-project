@@ -81,7 +81,7 @@ class ComplaintController extends Controller
         $status = ComplaintStatus::from($request->status);
         $this->complaintService->updateStatus($complaint, $status, $request->response);
 
-        return redirect()->route('admin.complaints.show', $complaint)
+        return redirect()->route(admin_route_name() . '.complaints.show', $complaint)
             ->with('success', 'Status aduan berhasil diperbarui.');
     }
 }

@@ -1,7 +1,7 @@
 <x-layouts.admin title="Tambah Pengguna">
     <div class="max-w-4xl mx-auto">
         <div class="flex items-center gap-3 mb-6">
-            <a href="{{ route('admin.users.index') }}" class="btn-outline btn-sm">Kembali</a>
+            <a href="{{ admin_route('users.index') }}" class="btn-outline btn-sm">Kembali</a>
         </div>
 
         <div class="card">
@@ -9,7 +9,7 @@
                 <h3 class="font-semibold text-slate-800">Form Tambah Pengguna (Siswa/Orang Tua)</h3>
             </div>
             <div class="card-body">
-                <form method="POST" action="{{ route('admin.users.store') }}" class="space-y-4">
+                <form method="POST" action="{{ admin_route('users.store') }}" class="space-y-4">
                     @csrf
                     <input type="hidden" name="role" value="user">
 
@@ -58,7 +58,7 @@
                     </div>
 
                     <div class="flex justify-end gap-2 pt-4 border-t border-slate-100">
-                        <a href="{{ route('admin.users.index') }}" class="btn-outline">Batal</a>
+                        <a href="{{ admin_route('users.index') }}" class="btn-outline">Batal</a>
                         <button type="submit" class="btn-primary">Simpan Pengguna</button>
                     </div>
                 </form>

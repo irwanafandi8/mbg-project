@@ -1,7 +1,7 @@
 <x-layouts.admin :title="$kitchen->name">
 
     <div class="flex items-center gap-3 mb-6">
-        <a href="{{ route('admin.kitchens.index') }}" class="btn-outline btn-sm">
+        <a href="{{ admin_route('kitchens.index') }}" class="btn-outline btn-sm">
             <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
             </svg>
@@ -43,7 +43,7 @@
                         <p class="font-medium text-slate-800 mt-1 leading-relaxed">{{ $kitchen->address }}</p>
                     </div>
                     <div class="pt-4 border-t border-slate-100">
-                        <a href="{{ route('admin.kitchens.edit', $kitchen) }}"
+                        <a href="{{ admin_route('kitchens.edit', $kitchen) }}"
                             class="btn-warning w-full justify-center">
                             Edit Dapur
                         </a>
@@ -109,7 +109,7 @@
                                 <tr>
                                     <td class="text-slate-500">{{ $index + 1 }}</td>
                                     <td class="font-medium text-blue-600">
-                                        <a href="{{ route('admin.complaints.show', $complaint) }}">
+                                        <a href="{{ admin_route('complaints.show', $complaint) }}">
                                             {{ $complaint->complaint_number }}
                                         </a>
                                     </td>
@@ -122,7 +122,7 @@
                                     </td>
                                     <td class="text-slate-500">{{ $complaint->created_at->format('d M Y') }}</td>
                                     <td>
-                                        <a href="{{ route('admin.complaints.show', $complaint) }}"
+                                        <a href="{{ admin_route('complaints.show', $complaint) }}"
                                             class="text-blue-600 hover:underline">Detail</a>
                                     </td>
                                 </tr>

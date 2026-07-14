@@ -1,7 +1,7 @@
 <x-layouts.admin :title="$kitchen->name">
     <div class="max-w-4xl mx-auto">
         <div class="flex items-center gap-3 mb-6">
-            <a href="{{ route('admin.kitchens.index') }}" class="btn-outline btn-sm">Kembali</a>
+            <a href="{{ admin_route('kitchens.index') }}" class="btn-outline btn-sm">Kembali</a>
         </div>
 
         <div class="card">
@@ -9,7 +9,7 @@
                 <h3 class="font-semibold text-slate-800">Form Edit Dapur</h3>
             </div>
             <div class="card-body">
-                <form method="POST" action="{{ route('admin.kitchens.update', $kitchen) }}" class="space-y-4">
+                <form method="POST" action="{{ admin_route('kitchens.update', $kitchen) }}" class="space-y-4">
                     @csrf
                     @method('PUT')
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -57,7 +57,7 @@
                     </div>
 
                     <div class="flex justify-end gap-2 pt-4 border-t border-slate-100">
-                        <a href="{{ route('admin.kitchens.index') }}" class="btn-outline">Batal</a>
+                        <a href="{{ admin_route('kitchens.index') }}" class="btn-outline">Batal</a>
                         <button type="submit" class="btn-primary">Simpan Perubahan</button>
                     </div>
                 </form>

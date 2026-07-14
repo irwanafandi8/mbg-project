@@ -99,7 +99,7 @@ class UserController extends Controller
             'role' => $user->role->value,
         ]);
 
-        return redirect()->route('admin.users.index')
+        return redirect()->route(admin_route_name() . '.users.index')
             ->with('success', 'Pengguna berhasil ditambahkan.');
     }
 
@@ -144,7 +144,7 @@ class UserController extends Controller
             'role' => $user->role->value,
         ]);
 
-        return redirect()->route('admin.users.index')
+        return redirect()->route(admin_route_name() . '.users.index')
             ->with('success', 'Pengguna berhasil diperbarui.');
     }
 
@@ -188,7 +188,7 @@ class UserController extends Controller
         AuditLog::log('delete_user', User::class, $user->id, ['name' => $user->name], null);
         $user->delete();
 
-        return redirect()->route('admin.users.index')
+        return redirect()->route(admin_route_name() . '.users.index')
             ->with('success', 'Pengguna berhasil dihapus.');
     }
 }

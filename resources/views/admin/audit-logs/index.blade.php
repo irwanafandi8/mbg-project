@@ -15,7 +15,7 @@
                     class="form-input py-2 w-36">
                 <button class="btn btn-secondary btn-sm">Filter</button>
                 @if (request()->hasAny(['search', 'date']))
-                    <a href="{{ route('admin.audit-logs.index') }}" class="btn-outline btn-sm">Reset</a>
+                    <a href="{{ admin_route('audit-logs.index') }}" class="btn-outline btn-sm">Reset</a>
                 @endif
             </form>
         </div>

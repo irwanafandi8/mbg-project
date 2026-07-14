@@ -2,7 +2,7 @@
 
     <div class="max-w-3xl mx-auto">
         <div class="flex items-center gap-3 mb-6">
-            <a href="{{ route('admin.categories.index') }}" class="btn-outline btn-sm">Kembali</a>
+            <a href="{{ admin_route('categories.index') }}" class="btn-outline btn-sm">Kembali</a>
         </div>
 
         <div class="card">
@@ -10,7 +10,7 @@
                 <h3 class="font-semibold text-slate-800">Form Tambah Kategori</h3>
             </div>
             <div class="card-body">
-                <form method="POST" action="{{ route('admin.categories.store') }}" class="space-y-4">
+                <form method="POST" action="{{ admin_route('categories.store') }}" class="space-y-4">
                     @csrf
 
                     <div>
@@ -38,7 +38,7 @@
                     </div>
 
                     <div class="flex justify-end gap-2 pt-4 border-t border-slate-100">
-                        <a href="{{ route('admin.categories.index') }}" class="btn-outline">Batal</a>
+                        <a href="{{ admin_route('categories.index') }}" class="btn-outline">Batal</a>
                         <button type="submit" class="btn-primary">Simpan Kategori</button>
                     </div>
                 </form>

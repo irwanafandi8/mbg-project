@@ -43,7 +43,7 @@
                 </form>
 
                 @if (auth()->user()->isSuperAdmin())
-                <a href="{{ route('admin.categories.create') }}" class="btn-primary btn-sm">
+                <a href="{{ admin_route('categories.create') }}" class="btn-primary btn-sm">
                     <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" />
                     </svg>
@@ -85,7 +85,7 @@
                             </td>
                             @if (auth()->user()->isSuperAdmin())
                             <td class="flex items-center gap-1">
-                                <a href="{{ route('admin.categories.edit', $category) }}"
+                                <a href="{{ admin_route('categories.edit', $category) }}"
                                     class="btn-icon text-blue-600 hover:bg-blue-50" title="Edit">
                                     <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"
                                         stroke-width="2">
@@ -94,7 +94,7 @@
                                     </svg>
                                 </a>
 
-                                <form method="POST" action="{{ route('admin.categories.toggle-status', $category) }}">
+                                <form method="POST" action="{{ admin_route('categories.toggle-status', $category) }}">
                                     @csrf
                                     @method('PATCH')
                                     <button type="submit"
@@ -108,7 +108,7 @@
                                     </button>
                                 </form>
 
-                                <form method="POST" action="{{ route('admin.categories.destroy', $category) }}"
+                                <form method="POST" action="{{ admin_route('categories.destroy', $category) }}"
                                     onsubmit="return confirm('Hapus kategori ini?')">
                                     @csrf
                                     @method('DELETE')
