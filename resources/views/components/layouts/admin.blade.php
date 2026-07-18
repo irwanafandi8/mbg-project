@@ -86,26 +86,6 @@
                 @endif
 
                 @if (auth()->user()->isSuperAdmin())
-                    <a href="{{ route('super_admin.kitchens.index') }}"
-                        class="sidebar-link {{ request()->routeIs('super_admin.kitchens.*') ? 'active' : '' }}">
-                        <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
-                            <path stroke-linecap="round" stroke-linejoin="round"
-                                d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
-                        </svg>
-                        <span>Dapur MBG</span>
-                    </a>
-                @else
-                    <a href="{{ route('admin.kitchens.index') }}"
-                        class="sidebar-link {{ request()->routeIs('admin.kitchens.*') ? 'active' : '' }}">
-                        <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
-                            <path stroke-linecap="round" stroke-linejoin="round"
-                                d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
-                        </svg>
-                        <span>Dapur MBG</span>
-                    </a>
-                @endif
-
-                @if (auth()->user()->isSuperAdmin())
                     <a href="{{ route('super_admin.schools.index') }}"
                         class="sidebar-link {{ request()->routeIs('super_admin.schools.*') ? 'active' : '' }}">
                         <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">

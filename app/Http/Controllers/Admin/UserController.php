@@ -15,20 +15,19 @@ use Illuminate\View\View;
 class UserController extends Controller
 {
     /**
-     * List all users.
+     * List users - school admin only sees users in their school.
      */
     public function index(Request $request): View
     {
         $query = User::with('school')->latest();
 
-        // School admin can only see user (siswa/orang tua)
         if (auth()->user()->isSchoolAdmin()) {
-            $query->where('role', UserRole::USER->value);
+            $schoolId = auth()->user()->school_id;
+            $query->where('school_id', $schoolId)->where('role', UserRole::USER->value);
         }
 
         if ($request->filled('role')) {
-            // School admin cannot filter by admin role
-            if (auth()->user()->isSchoolAdmin() && $request->role === 'admin') {
+            if (auth()->user()->isSchoolAdmin()) {
                 $query->where('role', UserRole::USER->value);
             } else {
                 $query->where('role', $request->role);
@@ -42,25 +41,32 @@ class UserController extends Controller
             });
         }
 
-        if ($request->filled('school_id')) {
-            $query->where('school_id', $request->school_id);
-        }
-
         $users = $query->paginate(10)->withQueryString();
-        $schools = School::where('is_active', true)->orderBy('name')->get();
+
+        if (auth()->user()->isSchoolAdmin()) {
+            $schoolId = auth()->user()->school_id;
+            $totalSchoolUsers = User::where('school_id', $schoolId)->where('role', UserRole::USER->value)->count();
+            $schools = collect();
+        } else {
+            $schools = School::where('is_active', true)->orderBy('name')->get();
+            $totalSchoolUsers = User::where('role', UserRole::USER->value)->count();
+        }
         $totalAdmins = User::where('role', UserRole::ADMIN->value)->count();
-        $totalSchoolUsers = User::where('role', UserRole::USER->value)->count();
 
         return view('admin.users.index', compact('users', 'schools', 'totalAdmins', 'totalSchoolUsers'));
     }
 
     /**
-     * Show create school administrator form.
+     * Show create user form.
      */
     public function create(): View
     {
-        $schools = School::where('is_active', true)->orderBy('name')->get();
+        if (auth()->user()->isSchoolAdmin()) {
+            $school = auth()->user()->school;
+            return view('admin.users.create', compact('school'));
+        }
 
+        $schools = School::where('is_active', true)->orderBy('name')->get();
         return view('admin.users.create', compact('schools'));
     }
 
@@ -86,6 +92,11 @@ class UserController extends Controller
             'phone' => ['nullable', 'string', 'max:20'],
         ]);
 
+        if (auth()->user()->isSchoolAdmin()) {
+            $validated['role'] = UserRole::USER;
+            $validated['school_id'] = auth()->user()->school_id;
+        }
+
         if ($validated['role'] === UserRole::ADMIN->value) {
             $validated['school_id'] = null;
         }
@@ -108,6 +119,10 @@ class UserController extends Controller
      */
     public function update(Request $request, User $user): RedirectResponse
     {
+        if (auth()->user()->isSchoolAdmin()) {
+            abort_if($user->school_id !== auth()->user()->school_id || $user->role !== UserRole::USER, 403);
+        }
+
         $rules = [
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'email', "unique:users,email,{$user->id}"],
@@ -122,6 +137,11 @@ class UserController extends Controller
         }
 
         $validated = $request->validate($rules);
+
+        if (auth()->user()->isSchoolAdmin()) {
+            $validated['role'] = UserRole::USER;
+            $validated['school_id'] = auth()->user()->school_id;
+        }
 
         if ($validated['role'] === UserRole::ADMIN->value) {
             $validated['school_id'] = null;
@@ -153,8 +173,13 @@ class UserController extends Controller
      */
     public function edit(User $user): View
     {
-        $schools = School::where('is_active', true)->orderBy('name')->get();
+        if (auth()->user()->isSchoolAdmin()) {
+            abort_if($user->school_id !== auth()->user()->school_id || $user->role !== UserRole::USER, 403);
+            $school = auth()->user()->school;
+            return view('admin.users.edit', compact('user', 'school'));
+        }
 
+        $schools = School::where('is_active', true)->orderBy('name')->get();
         return view('admin.users.edit', compact('user', 'schools'));
     }
 
@@ -163,6 +188,10 @@ class UserController extends Controller
      */
     public function toggleStatus(Request $request, User $user): RedirectResponse
     {
+        if (auth()->user()->isSchoolAdmin()) {
+            abort_if($user->school_id !== auth()->user()->school_id || $user->role !== UserRole::USER, 403);
+        }
+
         if ($user->getKey() === $request->user()->getAuthIdentifier()) {
             return back()->with('error', 'Anda tidak dapat menonaktifkan akun Anda sendiri.');
         }
@@ -177,6 +206,10 @@ class UserController extends Controller
      */
     public function destroy(Request $request, User $user): RedirectResponse
     {
+        if (auth()->user()->isSchoolAdmin()) {
+            abort_if($user->school_id !== auth()->user()->school_id || $user->role !== UserRole::USER, 403);
+        }
+
         if ($user->getKey() === $request->user()->getAuthIdentifier()) {
             return back()->with('error', 'Anda tidak dapat menghapus akun Anda sendiri.');
         }

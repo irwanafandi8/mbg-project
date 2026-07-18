@@ -46,7 +46,17 @@
 
     <div class="card mb-4">
         <div class="card-header gap-3 flex-wrap">
-            <h3 class="font-semibold text-slate-800">Daftar Saran</h3>
+            <div class="flex items-center gap-3">
+                <h3 class="font-semibold text-slate-800">Daftar Saran</h3>
+                @if (!auth()->user()->isSuperAdmin())
+                <a href="{{ admin_route('suggestions.create') }}" class="btn-primary btn-sm">
+                    <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" />
+                    </svg>
+                    Kirim Saran
+                </a>
+                @endif
+            </div>
             <div class="flex items-center gap-2 flex-wrap">
                 <form method="GET" class="flex gap-2">
                     <select name="status" class="form-select py-2" onchange="this.form.submit()">

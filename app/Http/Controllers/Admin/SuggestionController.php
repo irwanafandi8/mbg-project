@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Admin\StoreSuggestionRequest;
 use App\Models\Suggestion;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -28,6 +29,25 @@ class SuggestionController extends Controller
         $unreadCount = Suggestion::unread()->count();
 
         return view('admin.suggestions.index', compact('suggestions', 'unreadCount', 'readCount', 'totalCount'));
+    }
+
+    /**
+     * Show create suggestion form (admin sekolah).
+     */
+    public function create(): View
+    {
+        return view('admin.suggestions.create');
+    }
+
+    /**
+     * Store a new suggestion (admin sekolah).
+     */
+    public function store(StoreSuggestionRequest $request): RedirectResponse
+    {
+        $request->user()->suggestions()->create($request->validated());
+
+        return redirect()->route(admin_route_name() . '.suggestions.index')
+            ->with('success', 'Saran berhasil dikirim. Terima kasih atas masukan Anda!');
     }
 
     /**

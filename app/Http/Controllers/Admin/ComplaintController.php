@@ -4,8 +4,10 @@ namespace App\Http\Controllers\Admin;
 
 use App\Enums\ComplaintStatus;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Admin\StoreComplaintRequest;
 use App\Http\Requests\Admin\UpdateComplaintStatusRequest;
 use App\Models\Complaint;
+use App\Models\ComplaintCategory;
 use App\Services\ComplaintService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -60,6 +62,46 @@ class ComplaintController extends Controller
             'kitchens',
             'categories'
         ));
+    }
+
+    /**
+     * Show create complaint form (admin sekolah).
+     */
+    public function create(): View
+    {
+        $user   = auth()->user();
+        $school = $user->school;
+
+        abort_if(!$school || !$school->kitchen_id, 403,
+            'Sekolah Anda belum terhubung dengan dapur MBG. Hubungi administrator.');
+
+        $categories = ComplaintCategory::where('is_active', true)->orderBy('name')->get();
+
+        return view('admin.complaints.create', compact('categories', 'school'));
+    }
+
+    /**
+     * Store a new complaint (admin sekolah).
+     */
+    public function store(StoreComplaintRequest $request): RedirectResponse
+    {
+        $user   = auth()->user();
+        $school = $user->school;
+
+        $data = array_merge($request->validated(), [
+            'user_id'    => $user->id,
+            'kitchen_id' => $school->kitchen_id,
+        ]);
+
+        unset($data['attachments']);
+
+        $complaint = $this->complaintService->create(
+            $data,
+            $request->file('attachments', [])
+        );
+
+        return redirect()->route(admin_route_name() . '.complaints.show', $complaint)
+            ->with('success', 'Aduan berhasil dikirim. Nomor aduan Anda: ' . $complaint->complaint_number);
     }
 
     /**

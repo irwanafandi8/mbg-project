@@ -30,6 +30,9 @@
                             class="w-44">
                     </div>
 
+                    @if (!auth()->user()->isSuperAdmin())
+                    <button class="btn-secondary btn-sm">Cari</button>
+                    @else
                     <select name="school_id" class="form-select py-2 w-44" onchange="this.form.submit()">
                         <option value="">Semua Sekolah</option>
                         @foreach ($schools as $s)
@@ -37,8 +40,8 @@
                                 {{ $s->name }}</option>
                         @endforeach
                     </select>
-
                     <button class="btn-secondary btn-sm">Cari</button>
+                    @endif
                 </form>
 
                 <a href="{{ admin_route('users.create') }}" class="btn-primary btn-sm">Tambah Pengguna</a>
@@ -52,7 +55,9 @@
                         <th>No</th>
                         <th>Nama</th>
                         <th>Email</th>
+                        @if (!auth()->user()->isSchoolAdmin())
                         <th>Sekolah</th>
+                        @endif
                         <th>No. Telepon</th>
                         <th>Login Terakhir</th>
                         <th>Status</th>
@@ -69,7 +74,9 @@
                                 </div>
                             </td>
                             <td class="text-slate-500">{{ $user->email }}</td>
+                            @if (!auth()->user()->isSchoolAdmin())
                             <td class="whitespace-nowrap">{{ $user->school?->name ?? '-' }}</td>
+                            @endif
                             <td class="text-slate-500">{{ $user->phone ?? '-' }}</td>
                             <td class="text-xs text-slate-500">
                                 {{ $user->last_login_at ? $user->last_login_at->diffForHumans() : 'Belum pernah' }}
@@ -120,7 +127,7 @@
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="8">
+                            <td colspan="{{ auth()->user()->isSchoolAdmin() ? 7 : 8 }}">
                                 <div class="empty-state">
                                     <svg fill="none" viewBox="0 0 24 24" stroke="currentColor"
                                         stroke-width="1.2">

@@ -55,15 +55,6 @@ Route::prefix('super-admin')
         Route::delete('/categories/{category}', [Admin\CategoryController::class, 'destroy'])->name('categories.destroy');
         Route::patch('/categories/{category}/toggle-status', [Admin\CategoryController::class, 'toggleStatus'])->name('categories.toggle-status');
 
-        // Kitchens (Dapur MBG)
-        Route::get('/kitchens', [Admin\KitchenController::class, 'index'])->name('kitchens.index');
-        Route::get('/kitchens/create', [Admin\KitchenController::class, 'create'])->name('kitchens.create');
-        Route::post('/kitchens', [Admin\KitchenController::class, 'store'])->name('kitchens.store');
-        Route::get('/kitchens/{kitchen}', [Admin\KitchenController::class, 'show'])->name('kitchens.show');
-        Route::get('/kitchens/{kitchen}/edit', [Admin\KitchenController::class, 'edit'])->name('kitchens.edit');
-        Route::put('/kitchens/{kitchen}', [Admin\KitchenController::class, 'update'])->name('kitchens.update');
-        Route::delete('/kitchens/{kitchen}', [Admin\KitchenController::class, 'destroy'])->name('kitchens.destroy');
-
         // Schools
         Route::get('/schools', [Admin\SchoolController::class, 'index'])->name('schools.index');
         Route::get('/schools/create', [Admin\SchoolController::class, 'create'])->name('schools.create');
@@ -107,15 +98,14 @@ Route::prefix('admin')
         // Dashboard
         Route::get('/dashboard', [Admin\DashboardController::class, 'index'])->name('dashboard');
 
-        // Complaints (admin sekolah hanya bisa lihat, tidak bisa ubah status)
+        // Complaints (admin sekolah bisa lihat dan buat aduan)
         Route::get('/complaints', [Admin\ComplaintController::class, 'index'])->name('complaints.index');
+        Route::get('/complaints/create', [Admin\ComplaintController::class, 'create'])->name('complaints.create');
+        Route::post('/complaints', [Admin\ComplaintController::class, 'store'])->name('complaints.store');
         Route::get('/complaints/{complaint}', [Admin\ComplaintController::class, 'show'])->name('complaints.show');
 
         // Categories (admin sekolah hanya bisa lihat, tidak bisa CRUD)
         Route::get('/categories', [Admin\CategoryController::class, 'index'])->name('categories.index');
-
-        // Kitchens (Dapur MBG) (admin sekolah hanya bisa lihat)
-        Route::get('/kitchens', [Admin\KitchenController::class, 'index'])->name('kitchens.index');
 
         // Schools (admin sekolah hanya bisa lihat)
         Route::get('/schools', [Admin\SchoolController::class, 'index'])->name('schools.index');
@@ -129,8 +119,10 @@ Route::prefix('admin')
         Route::patch('/users/{user}/toggle-status', [Admin\UserController::class, 'toggleStatus'])->name('users.toggle-status');
         Route::delete('/users/{user}', [Admin\UserController::class, 'destroy'])->name('users.destroy');
 
-        // Suggestions
+        // Suggestions (admin sekolah bisa lihat dan kirim saran)
         Route::get('/suggestions', [Admin\SuggestionController::class, 'index'])->name('suggestions.index');
+        Route::get('/suggestions/create', [Admin\SuggestionController::class, 'create'])->name('suggestions.create');
+        Route::post('/suggestions', [Admin\SuggestionController::class, 'store'])->name('suggestions.store');
         Route::patch('/suggestions/{suggestion}/mark-read', [Admin\SuggestionController::class, 'markRead'])->name('suggestions.mark-read');
         Route::post('/suggestions/mark-all-read', [Admin\SuggestionController::class, 'markAllRead'])->name('suggestions.mark-all-read');
 
