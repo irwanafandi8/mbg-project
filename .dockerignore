@@ -1,0 +1,16 @@
+node_modules
+vendor
+.git
+.gitignore
+docker-compose.yml
+docker.env
+.env
+.env copy.example
+.DS_Store
+.vite
+storage/framework/cache/**
+storage/framework/sessions/**
+storage/framework/views/**
+storage/logs/**
+public/hot
+public/build/hot
