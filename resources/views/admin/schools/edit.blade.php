@@ -16,29 +16,33 @@
                         <div class="md:col-span-2">
                             <label class="form-label">Nama Sekolah <span class="text-red-500">*</span></label>
                             <input type="text" name="name" value="{{ old('name', $school->name) }}"
-                                placeholder="Contoh: SD Negeri 01" class="form-input mt-1" required>
+                                placeholder="Contoh: SD Negeri 01" class="form-input mt-1 {{ $errors->has('name') ? 'error' : '' }}" required>
+                            @error('name')<p class="form-error">{{ $message }}</p>@enderror
                         </div>
                         <div>
                             <label class="form-label">NPSN <span class="text-red-500">*</span></label>
                             <input type="text" name="npsn" value="{{ old('npsn', $school->npsn) }}"
-                                placeholder="Masukkan NPSN sekolah" class="form-input mt-1" required>
+                                placeholder="Masukkan NPSN sekolah" class="form-input mt-1 {{ $errors->has('npsn') ? 'error' : '' }}" required>
+                            @error('npsn')<p class="form-error">{{ $message }}</p>@enderror
                         </div>
                         <div>
                             <label class="form-label">No. Telepon</label>
                             <input type="text" name="phone" value="{{ old('phone', $school->phone) }}"
-                                placeholder="Contoh: 0211234567" class="form-input mt-1">
+                                placeholder="Contoh: 0211234567" class="form-input mt-1 {{ $errors->has('phone') ? 'error' : '' }}">
+                            @error('phone')<p class="form-error">{{ $message }}</p>@enderror
                         </div>
                     </div>
 
                     <div>
                         <label class="form-label">Alamat <span class="text-red-500">*</span></label>
-                        <textarea name="address" rows="3" class="form-textarea mt-1" placeholder="Masukkan alamat lengkap sekolah"
+                        <textarea name="address" rows="3" class="form-textarea mt-1 {{ $errors->has('address') ? 'error' : '' }}" placeholder="Masukkan alamat lengkap sekolah"
                             required>{{ old('address', $school->address) }}</textarea>
+                        @error('address')<p class="form-error">{{ $message }}</p>@enderror
                     </div>
 
                     <div>
                         <label class="form-label">Pemetaan Dapur MBG</label>
-                        <select name="kitchen_id" class="form-select mt-1">
+                        <select name="kitchen_id" class="form-select mt-1 {{ $errors->has('kitchen_id') ? 'error' : '' }}">
                             <option value="">-- Tanpa Dapur --</option>
                             @foreach ($kitchens as $k)
                                 <option value="{{ $k->id }}"
@@ -46,6 +50,7 @@
                                     {{ $k->name }}</option>
                             @endforeach
                         </select>
+                        @error('kitchen_id')<p class="form-error">{{ $message }}</p>@enderror
                     </div>
 
                     <div class="flex items-center gap-2">

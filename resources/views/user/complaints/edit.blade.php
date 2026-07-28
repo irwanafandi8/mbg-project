@@ -43,7 +43,7 @@
                         </div>
                         <div>
                             <label class="form-label">Prioritas <span class="text-red-500">*</span></label>
-                            <select name="priority" class="form-select mt-1">
+                            <select name="priority" class="form-select mt-1 {{ $errors->has('priority') ? 'error' : '' }}">
                                 @foreach (\App\Enums\ComplaintPriority::cases() as $p)
                                     <option value="{{ $p->value }}"
                                         {{ old('priority', $complaint->priority->value) === $p->value ? 'selected' : '' }}>

@@ -41,6 +41,15 @@ Route::prefix('super-admin')
         Route::patch('/admins/{user}/toggle-status', [SuperAdmin\AdminController::class, 'toggleStatus'])->name('admins.toggle-status');
         Route::delete('/admins/{user}', [SuperAdmin\AdminController::class, 'destroy'])->name('admins.destroy');
 
+        // Kitchens / SPPG
+        Route::get('/kitchens', [Admin\KitchenController::class, 'index'])->name('kitchens.index');
+        Route::get('/kitchens/create', [Admin\KitchenController::class, 'create'])->name('kitchens.create');
+        Route::post('/kitchens', [Admin\KitchenController::class, 'store'])->name('kitchens.store');
+        Route::get('/kitchens/{kitchen}', [Admin\KitchenController::class, 'show'])->name('kitchens.show');
+        Route::get('/kitchens/{kitchen}/edit', [Admin\KitchenController::class, 'edit'])->name('kitchens.edit');
+        Route::put('/kitchens/{kitchen}', [Admin\KitchenController::class, 'update'])->name('kitchens.update');
+        Route::delete('/kitchens/{kitchen}', [Admin\KitchenController::class, 'destroy'])->name('kitchens.destroy');
+
         // Complaints
         Route::get('/complaints', [Admin\ComplaintController::class, 'index'])->name('complaints.index');
         Route::get('/complaints/{complaint}', [Admin\ComplaintController::class, 'show'])->name('complaints.show');

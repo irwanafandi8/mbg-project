@@ -14,44 +14,50 @@
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div>
                             <label class="form-label">Nama Dapur <span class="text-red-500">*</span></label>
-                            <input type="text" name="name" value="{{ old('name') }}" class="form-input mt-1"
+                            <input type="text" name="name" value="{{ old('name') }}" class="form-input mt-1 {{ $errors->has('name') ? 'error' : '' }}"
                                 placeholder="Contoh: Dapur MBG Kecamatan A" required>
+                            @error('name')<p class="form-error">{{ $message }}</p>@enderror
                         </div>
                         <div>
                             <label class="form-label">Penanggung Jawab <span class="text-red-500">*</span></label>
                             <input type="text" name="person_in_charge" value="{{ old('person_in_charge') }}"
-                                placeholder="Nama penanggung jawab dapur" class="form-input mt-1" required>
+                                placeholder="Nama penanggung jawab dapur" class="form-input mt-1 {{ $errors->has('person_in_charge') ? 'error' : '' }}" required>
+                            @error('person_in_charge')<p class="form-error">{{ $message }}</p>@enderror
                         </div>
                     </div>
 
                     <div>
                         <label class="form-label">Alamat <span class="text-red-500">*</span></label>
-                        <textarea name="address" rows="3" class="form-textarea mt-1" placeholder="Masukkan alamat lengkap dapur" required>{{ old('address') }}</textarea>
+                        <textarea name="address" rows="3" class="form-textarea mt-1 {{ $errors->has('address') ? 'error' : '' }}" placeholder="Masukkan alamat lengkap dapur" required>{{ old('address') }}</textarea>
+                            @error('address')<p class="form-error">{{ $message }}</p>@enderror
                     </div>
 
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div>
                             <label class="form-label">No. Telepon</label>
                             <input type="text" name="phone" value="{{ old('phone') }}"
-                                placeholder="Contoh: 081234567890" class="form-input mt-1">
+                                placeholder="Contoh: 081234567890" class="form-input mt-1 {{ $errors->has('phone') ? 'error' : '' }}">
+                            @error('phone')<p class="form-error">{{ $message }}</p>@enderror
                         </div>
                         <div>
                             <label class="form-label">Kapasitas Produksi <span class="text-red-500">*</span></label>
                             <input type="number" name="production_capacity" min="1"
                                 value="{{ old('production_capacity') }}" placeholder="Contoh: 500"
-                                class="form-input mt-1" required>
+                                class="form-input mt-1 {{ $errors->has('production_capacity') ? 'error' : '' }}" required>
+                            @error('production_capacity')<p class="form-error">{{ $message }}</p>@enderror
                         </div>
                     </div>
 
                     <div>
                         <label class="form-label">Status Operasional</label>
-                        <select name="operational_status" class="form-select mt-1">
+                        <select name="operational_status" class="form-select mt-1 {{ $errors->has('operational_status') ? 'error' : '' }}">
                             @foreach (\App\Enums\OperationalStatus::cases() as $status)
                                 <option value="{{ $status->value }}"
                                     {{ old('operational_status') === $status->value ? 'selected' : '' }}>
                                     {{ $status->label() }}</option>
                             @endforeach
                         </select>
+                        @error('operational_status')<p class="form-error">{{ $message }}</p>@enderror
                     </div>
 
                     <div class="flex justify-end gap-2 pt-4 border-t border-slate-100">

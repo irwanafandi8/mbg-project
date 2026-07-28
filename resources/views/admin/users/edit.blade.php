@@ -29,12 +29,14 @@
                         <div>
                             <label class="form-label">Nama Lengkap <span class="text-red-500">*</span></label>
                             <input type="text" name="name" value="{{ old('name', $user->name) }}"
-                                placeholder="Masukkan nama lengkap" class="form-input mt-1" required>
+                                placeholder="Masukkan nama lengkap" class="form-input mt-1 {{ $errors->has('name') ? 'error' : '' }}" required>
+                            @error('name')<p class="form-error">{{ $message }}</p>@enderror
                         </div>
                         <div>
                             <label class="form-label">Email <span class="text-red-500">*</span></label>
                             <input type="email" name="email" value="{{ old('email', $user->email) }}"
-                                placeholder="contoh@email.com" class="form-input mt-1" required>
+                                placeholder="contoh@email.com" class="form-input mt-1 {{ $errors->has('email') ? 'error' : '' }}" required>
+                            @error('email')<p class="form-error">{{ $message }}</p>@enderror
                         </div>
                     </div>
 
@@ -43,12 +45,13 @@
                         <div>
                             <label class="form-label">No. Telepon</label>
                             <input type="text" name="phone" value="{{ old('phone', $user->phone) }}"
-                                placeholder="Contoh: 081234567890" class="form-input mt-1">
+                                placeholder="Contoh: 081234567890" class="form-input mt-1 {{ $errors->has('phone') ? 'error' : '' }}">
+                            @error('phone')<p class="form-error">{{ $message }}</p>@enderror
                         </div>
                         @else
                         <div>
                             <label class="form-label">Sekolah</label>
-                            <select name="school_id" class="form-select mt-1">
+                            <select name="school_id" class="form-select mt-1 {{ $errors->has('school_id') ? 'error' : '' }}">
                                 <option value="">-- Pilih Sekolah --</option>
                                 @foreach ($schools as $s)
                                     <option value="{{ $s->id }}"
@@ -56,11 +59,13 @@
                                         {{ $s->name }}</option>
                                 @endforeach
                             </select>
+                            @error('school_id')<p class="form-error">{{ $message }}</p>@enderror
                         </div>
                         <div>
                             <label class="form-label">No. Telepon</label>
                             <input type="text" name="phone" value="{{ old('phone', $user->phone) }}"
-                                placeholder="Contoh: 081234567890" class="form-input mt-1">
+                                placeholder="Contoh: 081234567890" class="form-input mt-1 {{ $errors->has('phone') ? 'error' : '' }}">
+                            @error('phone')<p class="form-error">{{ $message }}</p>@enderror
                         </div>
                         @endif
                     </div>
@@ -68,8 +73,9 @@
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div>
                             <label class="form-label">Password Baru (opsional)</label>
-                            <input type="password" name="password" class="form-input mt-1"
+                            <input type="password" name="password" class="form-input mt-1 {{ $errors->has('password') ? 'error' : '' }}"
                                 placeholder="Kosongkan jika tidak diubah">
+                            @error('password')<p class="form-error">{{ $message }}</p>@enderror
                         </div>
                         <div>
                             <label class="form-label">Konfirmasi Password</label>

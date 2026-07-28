@@ -16,7 +16,7 @@
 
                     <div>
                         <label for="name" class="form-label block mb-1">Nama</label>
-                        <input type="text" name="name" id="name" class="form-input"
+                        <input type="text" name="name" id="name" class="form-input {{ $errors->has('name') ? 'error' : '' }}"
                             placeholder="Masukkan nama" value="{{ old('name', $user->name) }}" required>
                         @error('name')
                             <p class="text-sm text-red-600 mt-1">{{ $message }}</p>
@@ -25,7 +25,7 @@
 
                     <div>
                         <label for="email" class="form-label block mb-1">Email</label>
-                        <input type="email" name="email" id="email" class="form-input"
+                        <input type="email" name="email" id="email" class="form-input {{ $errors->has('email') ? 'error' : '' }}"
                             placeholder="contoh@email.com" value="{{ old('email', $user->email) }}" required>
                         @error('email')
                             <p class="text-sm text-red-600 mt-1">{{ $message }}</p>
@@ -34,7 +34,7 @@
 
                     <div>
                         <label for="phone" class="form-label block mb-1">Nomor Telepon</label>
-                        <input type="text" name="phone" id="phone" class="form-input"
+                        <input type="text" name="phone" id="phone" class="form-input {{ $errors->has('phone') ? 'error' : '' }}"
                             placeholder="Contoh: 081234567890" value="{{ old('phone', $user->phone) }}">
                         @error('phone')
                             <p class="text-sm text-red-600 mt-1">{{ $message }}</p>
@@ -58,7 +58,7 @@
 
                     <div>
                         <label for="current_password" class="form-label block mb-1">Password Saat Ini</label>
-                        <input type="password" name="current_password" id="current_password" class="form-input"
+                        <input type="password" name="current_password" id="current_password" class="form-input {{ $errors->has('current_password') ? 'error' : '' }}"
                             placeholder="Masukkan password saat ini" required>
                         @error('current_password')
                             <p class="text-sm text-red-600 mt-1">{{ $message }}</p>
@@ -67,7 +67,7 @@
 
                     <div>
                         <label for="password" class="form-label block mb-1">Password Baru</label>
-                        <input type="password" name="password" id="password" class="form-input"
+                        <input type="password" name="password" id="password" class="form-input {{ $errors->has('password') ? 'error' : '' }}"
                             placeholder="Masukkan password baru" required>
                         @error('password')
                             <p class="text-sm text-red-600 mt-1">{{ $message }}</p>
