@@ -42,6 +42,7 @@ RUN composer install --no-interaction --optimize-autoloader --no-dev \
     && npm install --ignore-scripts \
     && npm run build \
     && rm -rf node_modules \
+    && php artisan storage:link \
     && chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache \
     && chmod -R 775 /var/www/html/storage /var/www/html/bootstrap/cache \
     && mkdir -p /var/log/supervisor /run/nginx /run/supervisor
