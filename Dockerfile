@@ -13,7 +13,6 @@ RUN apk add --no-cache \
     freetype-dev \
     libjpeg-turbo-dev \
     libpng-dev \
-    libzip-dev \
     nodejs \
     npm \
     git \
@@ -27,8 +26,7 @@ RUN apk add --no-cache \
     gd \
     bcmath \
     exif \
-    opcache \
-    zip
+    opcache
 
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
@@ -40,7 +38,7 @@ WORKDIR /var/www/html
 
 COPY . .
 
-RUN composer install --no-interaction --optimize-autoloader --no-dev \
+RUN composer install --no-interaction --optimize-autoloader --no-dev --ignore-platform-req=ext-zip \
     && npm install --ignore-scripts \
     && npm run build \
     && rm -rf node_modules \
