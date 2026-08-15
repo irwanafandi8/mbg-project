@@ -14,7 +14,7 @@ class UpdateComplaintStatusRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'status'   => ['required', 'in:pending,received,in_progress,resolved,rejected'],
+            'status' => ['required', 'in:pending,received,in_progress,resolved,rejected'],
             'response' => ['nullable', 'string', 'min:5', 'max:2000'],
         ];
     }
@@ -23,8 +23,8 @@ class UpdateComplaintStatusRequest extends FormRequest
     {
         return [
             'status.required' => 'Status wajib dipilih.',
-            'status.in'       => 'Status tidak valid.',
-            'response.min'    => 'Tanggapan minimal 5 karakter.',
+            'status.in' => 'Status tidak valid.',
+            'response.min' => 'Tanggapan minimal 5 karakter.',
         ];
     }
 }

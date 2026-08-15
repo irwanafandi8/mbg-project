@@ -31,38 +31,21 @@
                 <form method="POST" action="{{ route('user.complaints.store') }}" enctype="multipart/form-data">
                     @csrf
 
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-                        <div>
-                            <label class="form-label">Kategori Aduan <span class="text-red-500">*</span></label>
-                            <select name="category_id"
-                                class="form-select {{ $errors->has('category_id') ? 'error' : '' }}">
-                                <option value="">-- Pilih Kategori --</option>
-                                @foreach ($categories as $category)
-                                    <option value="{{ $category->id }}"
-                                        {{ old('category_id') == $category->id ? 'selected' : '' }}>
-                                        {{ $category->name }}
-                                    </option>
-                                @endforeach
-                            </select>
-                            @error('category_id')
-                                <p class="form-error">{{ $message }}</p>
-                            @enderror
-                        </div>
-                        <div>
-                            <label class="form-label">Prioritas <span class="text-red-500">*</span></label>
-                            <select name="priority" class="form-select {{ $errors->has('priority') ? 'error' : '' }}">
-                                <option value="">-- Pilih Prioritas --</option>
-                                @foreach (\App\Enums\ComplaintPriority::cases() as $p)
-                                    <option value="{{ $p->value }}"
-                                        {{ old('priority') === $p->value ? 'selected' : '' }}>
-                                        {{ $p->label() }}
-                                    </option>
-                                @endforeach
-                            </select>
-                            @error('priority')
-                                <p class="form-error">{{ $message }}</p>
-                            @enderror
-                        </div>
+                    <div class="mb-4">
+                        <label class="form-label">Kategori Aduan <span class="text-red-500">*</span></label>
+                        <select name="category_id"
+                            class="form-select {{ $errors->has('category_id') ? 'error' : '' }}">
+                            <option value="">-- Pilih Kategori --</option>
+                            @foreach ($categories as $category)
+                                <option value="{{ $category->id }}"
+                                    {{ old('category_id') == $category->id ? 'selected' : '' }}>
+                                    {{ $category->name }}
+                                </option>
+                            @endforeach
+                        </select>
+                        @error('category_id')
+                            <p class="form-error">{{ $message }}</p>
+                        @enderror
                     </div>
 
                     <div class="mb-4">

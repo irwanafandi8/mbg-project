@@ -16,10 +16,6 @@
             <span class="badge-dot {{ $complaint->status->dotClass() }}"></span>
             {{ $complaint->status->label() }}
         </span>
-
-        <span class="badge {{ $complaint->priority->bgClass() }}">
-            {{ $complaint->priority->label() }}
-        </span>
     </div>
 
     <div class="space-y-6">
@@ -229,7 +225,7 @@
                                 <span class="badge-dot {{ $complaint->status->dotClass() }}"></span>
                                 {{ $complaint->status->label() }}
                             </span>
-                            <p class="text-sm text-slate-500 mt-3">Status aduan hanya dapat diperbarui oleh Super Admin.</p>
+                            <p class="text-sm text-slate-500 mt-3">Status aduan hanya dapat diperbarui oleh Admin SPPG.</p>
                         </div>
                     </div>
                     @endif

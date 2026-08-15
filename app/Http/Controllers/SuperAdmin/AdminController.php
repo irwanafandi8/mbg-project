@@ -105,11 +105,11 @@ class AdminController extends Controller
 
         $validated = $request->validate($rules);
 
-        if (!isset($validated['is_active'])) {
+        if (! isset($validated['is_active'])) {
             $validated['is_active'] = false;
         }
 
-        if (!empty($validated['password'])) {
+        if (! empty($validated['password'])) {
             $validated['password'] = Hash::make($validated['password']);
         } else {
             unset($validated['password']);
@@ -135,7 +135,7 @@ class AdminController extends Controller
             return back()->with('error', 'Anda tidak dapat menonaktifkan akun Anda sendiri.');
         }
 
-        $user->update(['is_active' => !$user->is_active]);
+        $user->update(['is_active' => ! $user->is_active]);
 
         return back()->with('success', 'Status admin berhasil diperbarui.');
     }

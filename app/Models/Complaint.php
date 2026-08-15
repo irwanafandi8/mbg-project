@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use App\Enums\ComplaintPriority;
 use App\Enums\ComplaintStatus;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -24,7 +23,6 @@ class Complaint extends Model
         'title',
         'description',
         'status',
-        'priority',
         'resolved_at',
     ];
 
@@ -35,7 +33,6 @@ class Complaint extends Model
     {
         return [
             'status' => ComplaintStatus::class,
-            'priority' => ComplaintPriority::class,
             'resolved_at' => 'datetime',
         ];
     }
@@ -61,7 +58,7 @@ class Complaint extends Model
     {
         $prefix = 'AD-';
         $date = now()->format('Ymd');
-        $lastComplaint = self::where('complaint_number', 'like', $prefix . $date . '%')
+        $lastComplaint = self::where('complaint_number', 'like', $prefix.$date.'%')
             ->orderBy('complaint_number', 'desc')
             ->first();
 
@@ -72,7 +69,7 @@ class Complaint extends Model
             $newNumber = 1;
         }
 
-        return $prefix . $date . str_pad($newNumber, 4, '0', STR_PAD_LEFT);
+        return $prefix.$date.str_pad($newNumber, 4, '0', STR_PAD_LEFT);
     }
 
     /**

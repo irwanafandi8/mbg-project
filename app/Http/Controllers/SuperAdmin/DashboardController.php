@@ -4,7 +4,6 @@ namespace App\Http\Controllers\SuperAdmin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Complaint;
-use App\Models\Kitchen;
 use App\Models\School;
 use App\Models\Suggestion;
 use App\Models\User;
@@ -27,7 +26,6 @@ class DashboardController extends Controller
         $avgResolution = $this->reportService->getAverageResolutionTime();
 
         $totalSchools = School::count();
-        $totalKitchens = Kitchen::count();
         $totalAdmins = User::where('role', 'admin')->count();
         $totalSchoolUsers = User::where('role', 'user')->count();
         $totalSuggestions = Suggestion::count();
@@ -52,7 +50,6 @@ class DashboardController extends Controller
             'byKitchen',
             'avgResolution',
             'totalSchools',
-            'totalKitchens',
             'totalAdmins',
             'totalSchoolUsers',
             'totalSuggestions',

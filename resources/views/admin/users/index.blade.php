@@ -45,6 +45,12 @@
                 </form>
 
                 <a href="{{ admin_route('users.create') }}" class="btn-primary btn-sm">Tambah Pengguna</a>
+                <a href="{{ admin_route('users.bulk-create') }}" class="btn-secondary btn-sm">
+                    <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M17 16v2a2 2 0 01-2 2H5a2 2 0 01-2-2v-2m4-10l3-3m0 0l3 3m-3-3v12" />
+                    </svg>
+                    Tambah Massal
+                </a>
             </div>
         </div>
 

@@ -19,8 +19,8 @@ class DashboardController extends Controller
 
         $complaints = $user->complaints()->latest()->limit(3)->get();
 
-        $totalComplaints    = $user->complaints()->count();
-        $pendingComplaints  = $user->complaints()->where('status', ComplaintStatus::PENDING)->count();
+        $totalComplaints = $user->complaints()->count();
+        $pendingComplaints = $user->complaints()->where('status', ComplaintStatus::PENDING)->count();
         $processedComplaints = $user->complaints()->whereIn('status', [
             ComplaintStatus::RECEIVED,
             ComplaintStatus::IN_PROGRESS,

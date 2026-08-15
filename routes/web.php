@@ -1,7 +1,8 @@
 <?php
 
-use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Admin;
+use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SuperAdmin;
 use App\Http\Controllers\User;
 use Illuminate\Support\Facades\Route;
@@ -41,15 +42,6 @@ Route::prefix('super-admin')
         Route::patch('/admins/{user}/toggle-status', [SuperAdmin\AdminController::class, 'toggleStatus'])->name('admins.toggle-status');
         Route::delete('/admins/{user}', [SuperAdmin\AdminController::class, 'destroy'])->name('admins.destroy');
 
-        // Kitchens / SPPG
-        Route::get('/kitchens', [Admin\KitchenController::class, 'index'])->name('kitchens.index');
-        Route::get('/kitchens/create', [Admin\KitchenController::class, 'create'])->name('kitchens.create');
-        Route::post('/kitchens', [Admin\KitchenController::class, 'store'])->name('kitchens.store');
-        Route::get('/kitchens/{kitchen}', [Admin\KitchenController::class, 'show'])->name('kitchens.show');
-        Route::get('/kitchens/{kitchen}/edit', [Admin\KitchenController::class, 'edit'])->name('kitchens.edit');
-        Route::put('/kitchens/{kitchen}', [Admin\KitchenController::class, 'update'])->name('kitchens.update');
-        Route::delete('/kitchens/{kitchen}', [Admin\KitchenController::class, 'destroy'])->name('kitchens.destroy');
-
         // Complaints
         Route::get('/complaints', [Admin\ComplaintController::class, 'index'])->name('complaints.index');
         Route::get('/complaints/{complaint}', [Admin\ComplaintController::class, 'show'])->name('complaints.show');
@@ -76,6 +68,10 @@ Route::prefix('super-admin')
         Route::get('/users', [Admin\UserController::class, 'index'])->name('users.index');
         Route::get('/users/create', [Admin\UserController::class, 'create'])->name('users.create');
         Route::post('/users', [Admin\UserController::class, 'store'])->name('users.store');
+        Route::get('/users/bulk-create', [Admin\UserController::class, 'bulkCreate'])->name('users.bulk-create');
+        Route::post('/users/bulk-upload', [Admin\UserController::class, 'bulkUpload'])->name('users.bulk-upload');
+        Route::get('/users/bulk-template', [Admin\UserController::class, 'downloadTemplate'])->name('users.bulk-template');
+        Route::post('/users/bulk', [Admin\UserController::class, 'bulkStore'])->name('users.bulk');
         Route::get('/users/{user}/edit', [Admin\UserController::class, 'edit'])->name('users.edit');
         Route::put('/users/{user}', [Admin\UserController::class, 'update'])->name('users.update');
         Route::patch('/users/{user}/toggle-status', [Admin\UserController::class, 'toggleStatus'])->name('users.toggle-status');
@@ -87,9 +83,9 @@ Route::prefix('super-admin')
         Route::post('/suggestions/mark-all-read', [Admin\SuggestionController::class, 'markAllRead'])->name('suggestions.mark-all-read');
 
         // Profile
-        Route::get('/profile', [\App\Http\Controllers\ProfileController::class, 'edit'])->name('profile.edit');
-        Route::put('/profile', [\App\Http\Controllers\ProfileController::class, 'update'])->name('profile.update');
-        Route::put('/profile/password', [\App\Http\Controllers\ProfileController::class, 'updatePassword'])->name('profile.password');
+        Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+        Route::put('/profile', [ProfileController::class, 'update'])->name('profile.update');
+        Route::put('/profile/password', [ProfileController::class, 'updatePassword'])->name('profile.password');
 
         // Audit Logs
         Route::get('/audit-logs', [Admin\AuditLogController::class, 'index'])->name('audit-logs.index');
@@ -123,6 +119,10 @@ Route::prefix('admin')
         Route::get('/users', [Admin\UserController::class, 'index'])->name('users.index');
         Route::get('/users/create', [Admin\UserController::class, 'create'])->name('users.create');
         Route::post('/users', [Admin\UserController::class, 'store'])->name('users.store');
+        Route::get('/users/bulk-create', [Admin\UserController::class, 'bulkCreate'])->name('users.bulk-create');
+        Route::post('/users/bulk-upload', [Admin\UserController::class, 'bulkUpload'])->name('users.bulk-upload');
+        Route::get('/users/bulk-template', [Admin\UserController::class, 'downloadTemplate'])->name('users.bulk-template');
+        Route::post('/users/bulk', [Admin\UserController::class, 'bulkStore'])->name('users.bulk');
         Route::get('/users/{user}/edit', [Admin\UserController::class, 'edit'])->name('users.edit');
         Route::put('/users/{user}', [Admin\UserController::class, 'update'])->name('users.update');
         Route::patch('/users/{user}/toggle-status', [Admin\UserController::class, 'toggleStatus'])->name('users.toggle-status');
@@ -136,9 +136,9 @@ Route::prefix('admin')
         Route::post('/suggestions/mark-all-read', [Admin\SuggestionController::class, 'markAllRead'])->name('suggestions.mark-all-read');
 
         // Profile
-        Route::get('/profile', [\App\Http\Controllers\ProfileController::class, 'edit'])->name('profile.edit');
-        Route::put('/profile', [\App\Http\Controllers\ProfileController::class, 'update'])->name('profile.update');
-        Route::put('/profile/password', [\App\Http\Controllers\ProfileController::class, 'updatePassword'])->name('profile.password');
+        Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+        Route::put('/profile', [ProfileController::class, 'update'])->name('profile.update');
+        Route::put('/profile/password', [ProfileController::class, 'updatePassword'])->name('profile.password');
 
         // Audit Logs
         Route::get('/audit-logs', [Admin\AuditLogController::class, 'index'])->name('audit-logs.index');
@@ -171,7 +171,7 @@ Route::prefix('user')
         Route::post('/suggestions', [User\SuggestionController::class, 'store'])->name('suggestions.store');
 
         // Profile
-        Route::get('/profile', [\App\Http\Controllers\ProfileController::class, 'edit'])->name('profile.edit');
-        Route::put('/profile', [\App\Http\Controllers\ProfileController::class, 'update'])->name('profile.update');
-        Route::put('/profile/password', [\App\Http\Controllers\ProfileController::class, 'updatePassword'])->name('profile.password');
+        Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+        Route::put('/profile', [ProfileController::class, 'update'])->name('profile.update');
+        Route::put('/profile/password', [ProfileController::class, 'updatePassword'])->name('profile.password');
     });

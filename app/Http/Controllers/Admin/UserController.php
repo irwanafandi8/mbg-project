@@ -9,8 +9,11 @@ use App\Models\School;
 use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Response;
 use Illuminate\View\View;
+use PhpOffice\PhpSpreadsheet\IOFactory;
 
 class UserController extends Controller
 {
@@ -63,10 +66,12 @@ class UserController extends Controller
     {
         if (auth()->user()->isSchoolAdmin()) {
             $school = auth()->user()->school;
+
             return view('admin.users.create', compact('school'));
         }
 
         $schools = School::where('is_active', true)->orderBy('name')->get();
+
         return view('admin.users.create', compact('schools'));
     }
 
@@ -110,8 +115,220 @@ class UserController extends Controller
             'role' => $user->role->value,
         ]);
 
-        return redirect()->route(admin_route_name() . '.users.index')
+        return redirect()->route(admin_route_name().'.users.index')
             ->with('success', 'Pengguna berhasil ditambahkan.');
+    }
+
+    /**
+     * Show bulk create user form.
+     */
+    public function bulkCreate(): View
+    {
+        if (auth()->user()->isSchoolAdmin()) {
+            $school = auth()->user()->school;
+
+            return view('admin.users.bulk-create', compact('school'));
+        }
+
+        $schools = School::where('is_active', true)->orderBy('name')->get();
+
+        return view('admin.users.bulk-create', compact('schools'));
+    }
+
+    /**
+     * Download CSV template for bulk user import.
+     */
+    public function downloadTemplate(): \Symfony\Component\HttpFoundation\Response
+    {
+        $filename = 'template_tambah_pengguna.csv';
+        $headers = [
+            'Content-Type' => 'text/csv',
+            'Content-Disposition' => "attachment; filename=\"{$filename}\"",
+        ];
+
+        $callback = function () {
+            $file = fopen('php://output', 'w');
+            fputcsv($file, ['name', 'email', 'phone']);
+            fputcsv($file, ['Andi Saputra', 'andi@contoh.com', '081234567890']);
+            fputcsv($file, ['Siti Rahmawati', 'siti@contoh.com', '081298765432']);
+            fputcsv($file, ['Budi Santoso', 'budi@contoh.com', '081298765433']);
+            fclose($file);
+        };
+
+        return Response::stream($callback, 200, $headers);
+    }
+
+    /**
+     * Parse uploaded CSV/Excel file and return data for bulk create form.
+     */
+    public function bulkUpload(Request $request): View
+    {
+        $request->validate([
+            'csv_file' => ['required', 'file', 'mimes:csv,txt,xlsx,xls', 'max:5120'],
+        ]);
+
+        $file = $request->file('csv_file');
+        $rows = [];
+        $errors = [];
+
+        $extension = strtolower($file->getClientOriginalExtension());
+
+        if (in_array($extension, ['xlsx', 'xls'])) {
+            $spreadsheet = IOFactory::load($file->getPathname());
+            $sheet = $spreadsheet->getActiveSheet();
+            $data = $sheet->toArray();
+
+            if (count($data) < 2) {
+                $errors[] = 'File Excel kosong atau tidak memiliki data.';
+            } else {
+                $header = array_map('strtolower', array_map('trim', $data[0]));
+                $requiredCols = ['name', 'email'];
+                $missingCols = array_diff($requiredCols, $header);
+
+                if (! empty($missingCols)) {
+                    $errors[] = 'Kolom yang wajib ada: '.implode(', ', $requiredCols).'. Kolom tidak ditemukan: '.implode(', ', $missingCols).'.';
+                } else {
+                    $emailIndex = array_search('email', $header);
+                    $nameIndex = array_search('name', $header);
+                    $phoneIndex = array_search('phone', $header);
+
+                    for ($i = 1; $i < count($data); $i++) {
+                        $lineNum = $i + 1;
+                        $name = trim((string) ($data[$i][$nameIndex] ?? ''));
+                        $email = trim((string) ($data[$i][$emailIndex] ?? ''));
+                        $phone = $phoneIndex !== false ? trim((string) ($data[$i][$phoneIndex] ?? '')) : '';
+
+                        if ($name === '' && $email === '') {
+                            continue;
+                        }
+
+                        if ($name === '') {
+                            $errors[] = "Baris {$lineNum}: Nama wajib diisi.";
+
+                            continue;
+                        }
+
+                        if ($email === '' || ! filter_var($email, FILTER_VALIDATE_EMAIL)) {
+                            $errors[] = "Baris {$lineNum}: Email tidak valid ({$email}).";
+
+                            continue;
+                        }
+
+                        $rows[] = [
+                            'name' => $name,
+                            'email' => $email,
+                            'phone' => $phone,
+                        ];
+                    }
+                }
+            }
+        } else {
+            if (($handle = fopen($file->getPathname(), 'r')) !== false) {
+                $header = fgetcsv($handle, 0, ',');
+
+                if ($header === false) {
+                    $errors[] = 'File CSV kosong atau format tidak valid.';
+                } else {
+                    $header = array_map('strtolower', array_map('trim', $header));
+
+                    $requiredCols = ['name', 'email'];
+                    $missingCols = array_diff($requiredCols, $header);
+
+                    if (! empty($missingCols)) {
+                        $errors[] = 'Kolom yang wajib ada: '.implode(', ', $requiredCols).'. Kolom tidak ditemukan: '.implode(', ', $missingCols).'.';
+                    } else {
+                        $emailIndex = array_search('email', $header);
+                        $nameIndex = array_search('name', $header);
+                        $phoneIndex = array_search('phone', $header);
+
+                        $lineNum = 1;
+                        while (($data = fgetcsv($handle, 0, ',')) !== false) {
+                            $lineNum++;
+                            $name = trim($data[$nameIndex] ?? '');
+                            $email = trim($data[$emailIndex] ?? '');
+                            $phone = $phoneIndex !== false ? trim($data[$phoneIndex] ?? '') : '';
+
+                            if ($name === '' && $email === '') {
+                                continue;
+                            }
+
+                            if ($name === '') {
+                                $errors[] = "Baris {$lineNum}: Nama wajib diisi.";
+
+                                continue;
+                            }
+
+                            if ($email === '' || ! filter_var($email, FILTER_VALIDATE_EMAIL)) {
+                                $errors[] = "Baris {$lineNum}: Email tidak valid ({$email}).";
+
+                                continue;
+                            }
+
+                            $rows[] = [
+                                'name' => $name,
+                                'email' => $email,
+                                'phone' => $phone,
+                            ];
+                        }
+                    }
+                }
+                fclose($handle);
+            }
+        }
+
+        if (auth()->user()->isSchoolAdmin()) {
+            $school = auth()->user()->school;
+
+            return view('admin.users.bulk-create', compact('school', 'rows', 'errors'));
+        }
+
+        $schools = School::where('is_active', true)->orderBy('name')->get();
+
+        return view('admin.users.bulk-create', compact('schools', 'rows', 'errors'));
+    }
+
+    /**
+     * Store multiple users at once.
+     */
+    public function bulkStore(Request $request): RedirectResponse
+    {
+        $validated = $request->validate([
+            'users' => ['required', 'array', 'min:1'],
+            'users.*.name' => ['required', 'string', 'max:255'],
+            'users.*.email' => ['required', 'email', 'unique:users,email'],
+            'users.*.phone' => ['nullable', 'string', 'max:20'],
+            'default_password' => ['nullable', 'string', 'min:8'],
+        ]);
+
+        $password = $validated['default_password'] ?? 'password123';
+        $successCount = 0;
+        $errorRows = [];
+
+        DB::beginTransaction();
+        try {
+            foreach ($validated['users'] as $index => $userData) {
+                $userData['password'] = Hash::make($password);
+                $userData['role'] = UserRole::USER;
+                $userData['school_id'] = auth()->user()->school_id;
+                $userData['is_active'] = true;
+
+                $user = User::create($userData);
+                AuditLog::log('create_user', User::class, $user->id, null, [
+                    'name' => $user->name,
+                    'email' => $user->email,
+                    'role' => $user->role->value,
+                ]);
+                $successCount++;
+            }
+            DB::commit();
+
+            return redirect()->route(admin_route_name().'.users.index')
+                ->with('success', "{$successCount} pengguna berhasil ditambahkan.");
+        } catch (\Exception $e) {
+            DB::rollBack();
+
+            return back()->withInput()->with('error', 'Gagal menambahkan pengguna: '.$e->getMessage());
+        }
     }
 
     /**
@@ -147,11 +364,11 @@ class UserController extends Controller
             $validated['school_id'] = null;
         }
 
-        if (!isset($validated['is_active'])) {
+        if (! isset($validated['is_active'])) {
             $validated['is_active'] = false;
         }
 
-        if (!empty($validated['password'])) {
+        if (! empty($validated['password'])) {
             $validated['password'] = Hash::make($validated['password']);
         } else {
             unset($validated['password']);
@@ -164,7 +381,7 @@ class UserController extends Controller
             'role' => $user->role->value,
         ]);
 
-        return redirect()->route(admin_route_name() . '.users.index')
+        return redirect()->route(admin_route_name().'.users.index')
             ->with('success', 'Pengguna berhasil diperbarui.');
     }
 
@@ -176,10 +393,12 @@ class UserController extends Controller
         if (auth()->user()->isSchoolAdmin()) {
             abort_if($user->school_id !== auth()->user()->school_id || $user->role !== UserRole::USER, 403);
             $school = auth()->user()->school;
+
             return view('admin.users.edit', compact('user', 'school'));
         }
 
         $schools = School::where('is_active', true)->orderBy('name')->get();
+
         return view('admin.users.edit', compact('user', 'schools'));
     }
 
@@ -196,7 +415,7 @@ class UserController extends Controller
             return back()->with('error', 'Anda tidak dapat menonaktifkan akun Anda sendiri.');
         }
 
-        $user->update(['is_active' => !$user->is_active]);
+        $user->update(['is_active' => ! $user->is_active]);
 
         return back()->with('success', 'Status pengguna berhasil diperbarui.');
     }
@@ -221,7 +440,7 @@ class UserController extends Controller
         AuditLog::log('delete_user', User::class, $user->id, ['name' => $user->name], null);
         $user->delete();
 
-        return redirect()->route(admin_route_name() . '.users.index')
+        return redirect()->route(admin_route_name().'.users.index')
             ->with('success', 'Pengguna berhasil dihapus.');
     }
 }

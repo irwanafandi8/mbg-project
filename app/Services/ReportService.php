@@ -43,7 +43,7 @@ class ReportService
     /**
      * Get monthly complaint data for charts.
      */
-    public function getMonthlyData(int $year = null): Collection
+    public function getMonthlyData(?int $year = null): Collection
     {
         $year = $year ?? now()->year;
 

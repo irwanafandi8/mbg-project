@@ -8,6 +8,7 @@ use App\Http\Requests\Admin\StoreComplaintRequest;
 use App\Http\Requests\Admin\UpdateComplaintStatusRequest;
 use App\Models\Complaint;
 use App\Models\ComplaintCategory;
+use App\Models\Kitchen;
 use App\Services\ComplaintService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -47,12 +48,12 @@ class ComplaintController extends Controller
 
         $complaints = $query->paginate(10)->withQueryString();
 
-        $totalComplaints  = Complaint::count();
+        $totalComplaints = Complaint::count();
         $pendingComplaints = Complaint::where('status', ComplaintStatus::PENDING)->count();
         $resolvedComplaints = Complaint::where('status', ComplaintStatus::RESOLVED)->count();
 
-        $kitchens   = \App\Models\Kitchen::orderBy('name')->get();
-        $categories = \App\Models\ComplaintCategory::where('is_active', true)->orderBy('name')->get();
+        $kitchens = Kitchen::orderBy('name')->get();
+        $categories = ComplaintCategory::where('is_active', true)->orderBy('name')->get();
 
         return view('admin.complaints.index', compact(
             'complaints',
@@ -69,10 +70,10 @@ class ComplaintController extends Controller
      */
     public function create(): View
     {
-        $user   = auth()->user();
+        $user = auth()->user();
         $school = $user->school;
 
-        abort_if(!$school || !$school->kitchen_id, 403,
+        abort_if(! $school || ! $school->kitchen_id, 403,
             'Sekolah Anda belum terhubung dengan dapur MBG. Hubungi administrator.');
 
         $categories = ComplaintCategory::where('is_active', true)->orderBy('name')->get();
@@ -85,11 +86,11 @@ class ComplaintController extends Controller
      */
     public function store(StoreComplaintRequest $request): RedirectResponse
     {
-        $user   = auth()->user();
+        $user = auth()->user();
         $school = $user->school;
 
         $data = array_merge($request->validated(), [
-            'user_id'    => $user->id,
+            'user_id' => $user->id,
             'kitchen_id' => $school->kitchen_id,
         ]);
 
@@ -100,8 +101,8 @@ class ComplaintController extends Controller
             $request->file('attachments', [])
         );
 
-        return redirect()->route(admin_route_name() . '.complaints.show', $complaint)
-            ->with('success', 'Aduan berhasil dikirim. Nomor aduan Anda: ' . $complaint->complaint_number);
+        return redirect()->route(admin_route_name().'.complaints.show', $complaint)
+            ->with('success', 'Aduan berhasil dikirim. Nomor aduan Anda: '.$complaint->complaint_number);
     }
 
     /**
@@ -123,7 +124,7 @@ class ComplaintController extends Controller
         $status = ComplaintStatus::from($request->status);
         $this->complaintService->updateStatus($complaint, $status, $request->response);
 
-        return redirect()->route(admin_route_name() . '.complaints.show', $complaint)
+        return redirect()->route(admin_route_name().'.complaints.show', $complaint)
             ->with('success', 'Status aduan berhasil diperbarui.');
     }
 }

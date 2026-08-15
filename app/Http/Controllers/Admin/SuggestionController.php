@@ -46,7 +46,7 @@ class SuggestionController extends Controller
     {
         $request->user()->suggestions()->create($request->validated());
 
-        return redirect()->route(admin_route_name() . '.suggestions.index')
+        return redirect()->route(admin_route_name().'.suggestions.index')
             ->with('success', 'Saran berhasil dikirim. Terima kasih atas masukan Anda!');
     }
 
@@ -56,6 +56,7 @@ class SuggestionController extends Controller
     public function markRead(Suggestion $suggestion): RedirectResponse
     {
         $suggestion->update(['is_read' => true]);
+
         return back()->with('success', 'Saran telah ditandai sebagai dibaca.');
     }
 
@@ -65,6 +66,7 @@ class SuggestionController extends Controller
     public function markAllRead(): RedirectResponse
     {
         Suggestion::unread()->update(['is_read' => true]);
+
         return back()->with('success', 'Semua saran telah ditandai sebagai dibaca.');
     }
 }

@@ -48,6 +48,7 @@ class AuditLog extends Model
         if ($this->model_type && $this->model_id) {
             return $this->model_type::find($this->model_id);
         }
+
         return null;
     }
 

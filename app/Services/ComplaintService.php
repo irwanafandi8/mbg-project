@@ -20,7 +20,7 @@ class ComplaintService
         return DB::transaction(function () use ($data, $files) {
             $complaint = Complaint::create($data);
 
-            if (!empty($files)) {
+            if (! empty($files)) {
                 $this->storeAttachments($complaint, $files);
             }
 
@@ -81,7 +81,7 @@ class ComplaintService
 
             $complaint->update($data);
 
-            if (!empty($files)) {
+            if (! empty($files)) {
                 $this->storeAttachments($complaint, $files);
             }
 
@@ -127,7 +127,7 @@ class ComplaintService
     {
         foreach ($files as $file) {
             if ($file instanceof UploadedFile) {
-                $path = $file->store('complaints/' . $complaint->id, 'public');
+                $path = $file->store('complaints/'.$complaint->id, 'public');
 
                 ComplaintAttachment::create([
                     'complaint_id' => $complaint->id,

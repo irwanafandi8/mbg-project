@@ -6,7 +6,7 @@
             <div class="flex items-center gap-2 px-5 py-5 border-b border-white/10">
                <img src="{{ asset('images/logo-bgn.png') }}" class="h-12 w-12" alt="logo-bgn">
                 <div>
-                    <p class="text-white font-bold text-sm leading-tight">SPPG MBG</p>
+                    <p class="text-white font-bold text-sm leading-tight">SPPG Indramayu Karanganyar 2</p>
                     <p class="text-blue-200 text-xs truncate max-w-28">{{ auth()->user()->school?->name ?? 'Sekolah' }}
                     </p>
                 </div>
@@ -141,7 +141,7 @@
 
             {{-- Footer --}}
             <footer class="px-4 sm:px-6 py-3 border-t border-slate-200 text-xs text-slate-400">
-                &copy; {{ date('Y') }} SPPG MBG - Sistem Pengaduan Program Makan Bergizi Gratis
+                &copy; {{ date('Y') }} SPPG Indramayu Karanganyar 2 - Sistem Pengaduan Program Makan Bergizi Gratis
             </footer>
         </div>
 

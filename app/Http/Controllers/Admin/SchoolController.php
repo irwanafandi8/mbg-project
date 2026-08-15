@@ -31,8 +31,8 @@ class SchoolController extends Controller
             $query->where('kitchen_id', $request->kitchen_id);
         }
 
-        $schools   = $query->latest()->paginate(10)->withQueryString();
-        $kitchens  = Kitchen::orderBy('name')->get();
+        $schools = $query->latest()->paginate(10)->withQueryString();
+        $kitchens = Kitchen::orderBy('name')->get();
         $totalSchools = School::count();
         $mappedSchools = School::whereNotNull('kitchen_id')->count();
         $unmappedSchools = School::whereNull('kitchen_id')->count();
@@ -64,7 +64,7 @@ class SchoolController extends Controller
         $school = School::create($request->validated());
         AuditLog::log('create_school', School::class, $school->id, null, $school->toArray());
 
-        return redirect()->route(admin_route_name() . '.schools.index')
+        return redirect()->route(admin_route_name().'.schools.index')
             ->with('success', 'Sekolah berhasil ditambahkan.');
     }
 
@@ -74,19 +74,19 @@ class SchoolController extends Controller
     public function update(Request $request, School $school): RedirectResponse
     {
         $validated = $request->validate([
-            'name'       => ['required', 'string', 'max:255'],
-            'npsn'       => ['required', 'string', 'max:20', "unique:schools,npsn,{$school->id}"],
-            'address'    => ['required', 'string'],
-            'phone'      => ['nullable', 'string', 'max:20'],
+            'name' => ['required', 'string', 'max:255'],
+            'npsn' => ['required', 'string', 'max:20', "unique:schools,npsn,{$school->id}"],
+            'address' => ['required', 'string'],
+            'phone' => ['nullable', 'string', 'max:20'],
             'kitchen_id' => ['nullable', 'exists:kitchens,id'],
-            'is_active'  => ['boolean'],
+            'is_active' => ['boolean'],
         ]);
 
         $old = $school->toArray();
         $school->update($validated);
         AuditLog::log('update_school', School::class, $school->id, $old, $school->fresh()->toArray());
 
-        return redirect()->route(admin_route_name() . '.schools.index')
+        return redirect()->route(admin_route_name().'.schools.index')
             ->with('success', 'Sekolah berhasil diperbarui.');
     }
 
@@ -112,7 +112,7 @@ class SchoolController extends Controller
         AuditLog::log('delete_school', School::class, $school->id, $school->toArray(), null);
         $school->delete();
 
-        return redirect()->route(admin_route_name() . '.schools.index')
+        return redirect()->route(admin_route_name().'.schools.index')
             ->with('success', 'Sekolah berhasil dihapus.');
     }
 }

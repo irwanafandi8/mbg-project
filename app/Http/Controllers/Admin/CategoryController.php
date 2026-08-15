@@ -46,7 +46,7 @@ class CategoryController extends Controller
         $category = ComplaintCategory::create($request->validated());
         AuditLog::log('create_category', ComplaintCategory::class, $category->id, null, $category->toArray());
 
-        return redirect()->route(admin_route_name() . '.categories.index')
+        return redirect()->route(admin_route_name().'.categories.index')
             ->with('success', 'Kategori berhasil ditambahkan.');
     }
 
@@ -56,9 +56,9 @@ class CategoryController extends Controller
     public function update(Request $request, ComplaintCategory $category): RedirectResponse
     {
         $validated = $request->validate([
-            'name'        => ['required', 'string', 'max:255', "unique:complaint_categories,name,{$category->id}"],
+            'name' => ['required', 'string', 'max:255', "unique:complaint_categories,name,{$category->id}"],
             'description' => ['nullable', 'string', 'max:1000'],
-            'is_active'   => ['boolean'],
+            'is_active' => ['boolean'],
         ]);
 
         $validated['is_active'] = $request->boolean('is_active');
@@ -67,7 +67,7 @@ class CategoryController extends Controller
         $category->update($validated);
         AuditLog::log('update_category', ComplaintCategory::class, $category->id, $old, $category->fresh()->toArray());
 
-        return redirect()->route(admin_route_name() . '.categories.index')
+        return redirect()->route(admin_route_name().'.categories.index')
             ->with('success', 'Kategori berhasil diperbarui.');
     }
 
@@ -91,7 +91,7 @@ class CategoryController extends Controller
         AuditLog::log('delete_category', ComplaintCategory::class, $category->id, $category->toArray(), null);
         $category->delete();
 
-        return redirect()->route(admin_route_name() . '.categories.index')
+        return redirect()->route(admin_route_name().'.categories.index')
             ->with('success', 'Kategori berhasil dihapus.');
     }
 
@@ -100,7 +100,7 @@ class CategoryController extends Controller
      */
     public function toggleStatus(ComplaintCategory $category): RedirectResponse
     {
-        $category->update(['is_active' => !$category->is_active]);
+        $category->update(['is_active' => ! $category->is_active]);
 
         return back()->with('success', 'Status kategori berhasil diperbarui.');
     }

@@ -14,9 +14,9 @@ class StoreCategoryRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name'        => ['required', 'string', 'max:255', 'unique:complaint_categories,name'],
+            'name' => ['required', 'string', 'max:255', 'unique:complaint_categories,name'],
             'description' => ['nullable', 'string', 'max:1000'],
-            'is_active'   => ['boolean'],
+            'is_active' => ['boolean'],
         ];
     }
 
@@ -24,7 +24,7 @@ class StoreCategoryRequest extends FormRequest
     {
         return [
             'name.required' => 'Nama kategori wajib diisi.',
-            'name.unique'   => 'Nama kategori sudah ada.',
+            'name.unique' => 'Nama kategori sudah ada.',
         ];
     }
 }

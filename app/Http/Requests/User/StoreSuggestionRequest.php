@@ -22,8 +22,8 @@ class StoreSuggestionRequest extends FormRequest
     {
         return [
             'message.required' => 'Pesan saran wajib diisi.',
-            'message.min'      => 'Saran minimal 10 karakter.',
-            'message.max'      => 'Saran maksimal 2000 karakter.',
+            'message.min' => 'Saran minimal 10 karakter.',
+            'message.max' => 'Saran maksimal 2000 karakter.',
         ];
     }
 }

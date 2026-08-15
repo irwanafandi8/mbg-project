@@ -9,6 +9,7 @@ class UpdateComplaintRequest extends FormRequest
     public function authorize(): bool
     {
         $complaint = $this->route('complaint');
+
         return auth()->check() &&
             auth()->user()->isUser() &&
             $complaint->user_id === auth()->id() &&
@@ -18,11 +19,10 @@ class UpdateComplaintRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'category_id'   => ['required', 'exists:complaint_categories,id'],
-            'title'         => ['required', 'string', 'min:10', 'max:255'],
-            'description'   => ['required', 'string', 'min:20'],
-            'priority'      => ['required', 'in:low,medium,high'],
-            'attachments'   => ['nullable', 'array', 'max:5'],
+            'category_id' => ['required', 'exists:complaint_categories,id'],
+            'title' => ['required', 'string', 'min:10', 'max:255'],
+            'description' => ['required', 'string', 'min:20'],
+            'attachments' => ['nullable', 'array', 'max:5'],
             'attachments.*' => ['file', 'mimes:jpeg,jpg,png,webp,pdf', 'max:5120'],
         ];
     }
@@ -31,11 +31,10 @@ class UpdateComplaintRequest extends FormRequest
     {
         return [
             'category_id.required' => 'Kategori aduan wajib dipilih.',
-            'title.required'       => 'Judul aduan wajib diisi.',
-            'title.min'            => 'Judul minimal 10 karakter.',
+            'title.required' => 'Judul aduan wajib diisi.',
+            'title.min' => 'Judul minimal 10 karakter.',
             'description.required' => 'Deskripsi aduan wajib diisi.',
-            'description.min'      => 'Deskripsi minimal 20 karakter.',
-            'priority.required'    => 'Prioritas wajib dipilih.',
+            'description.min' => 'Deskripsi minimal 20 karakter.',
         ];
     }
 }

@@ -31,7 +31,7 @@ class ComplaintController extends Controller
         }
 
         $complaints = $query->paginate(10)->withQueryString();
-        $statuses   = ComplaintStatus::cases();
+        $statuses = ComplaintStatus::cases();
 
         return view('user.complaints.index', compact('complaints', 'statuses'));
     }
@@ -41,11 +41,12 @@ class ComplaintController extends Controller
      */
     public function create(): View
     {
-        $user   = auth()->user();
+        $user = auth()->user();
         $school = $user->school;
 
-        abort_if(!$school || !$school->kitchen_id, 403,
-            'Sekolah Anda belum terhubung dengan dapur MBG. Hubungi administrator.');
+        if (! $school || ! $school->kitchen_id) {
+            abort(403, 'Sekolah Anda belum terhubung dengan dapur MBG. Hubungi administrator.');
+        }
 
         $categories = ComplaintCategory::where('is_active', true)->orderBy('name')->get();
 
@@ -57,11 +58,15 @@ class ComplaintController extends Controller
      */
     public function store(StoreComplaintRequest $request): RedirectResponse
     {
-        $user   = auth()->user();
+        $user = auth()->user();
         $school = $user->school;
 
+        if (! $school || ! $school->kitchen_id) {
+            return back()->with('error', 'Sekolah Anda belum terhubung dengan dapur. Hubungi administrator.');
+        }
+
         $data = array_merge($request->validated(), [
-            'user_id'    => $user->id,
+            'user_id' => $user->id,
             'kitchen_id' => $school->kitchen_id,
         ]);
 
@@ -73,7 +78,7 @@ class ComplaintController extends Controller
         );
 
         return redirect()->route('user.complaints.show', $complaint)
-            ->with('success', 'Aduan berhasil dikirim. Nomor aduan Anda: ' . $complaint->complaint_number);
+            ->with('success', 'Aduan berhasil dikirim. Nomor aduan Anda: '.$complaint->complaint_number);
     }
 
     /**
@@ -97,7 +102,7 @@ class ComplaintController extends Controller
             'Aduan hanya dapat diedit ketika statusnya masih Menunggu.');
 
         $categories = ComplaintCategory::where('is_active', true)->orderBy('name')->get();
-        $school     = auth()->user()->school;
+        $school = auth()->user()->school;
 
         return view('user.complaints.edit', compact('complaint', 'categories', 'school'));
     }

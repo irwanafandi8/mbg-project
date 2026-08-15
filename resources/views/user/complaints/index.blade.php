@@ -32,7 +32,6 @@
                         <th>Judul Aduan</th>
                         <th>Dapur MBG</th>
                         <th>Kategori</th>
-                        <th>Prioritas</th>
                         <th>Status</th>
                         <th>Tanggal</th>
                         <th>Aksi</th>
@@ -49,10 +48,6 @@
                             </td>
                             <td class="text-slate-500 text-sm">{{ $complaint->kitchen?->name ?? '-' }}</td>
                             <td class="text-slate-500 text-sm">{{ $complaint->category?->name ?? '-' }}</td>
-                            <td>
-                                <span
-                                    class="badge {{ $complaint->priority->bgClass() }}">{{ $complaint->priority->label() }}</span>
-                            </td>
                             <td>
                                 <span class="badge {{ $complaint->status->bgClass() }}">
                                     <span class="badge-dot {{ $complaint->status->dotClass() }}"></span>
@@ -98,7 +93,7 @@
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="9">
+                            <td colspan="8">
                                 <div class="empty-state">
                                     <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.2">
                                         <path stroke-linecap="round" stroke-linejoin="round"

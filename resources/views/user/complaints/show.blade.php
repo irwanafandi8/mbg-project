@@ -56,7 +56,7 @@
                         <p class="text-xs text-slate-500">Deskripsi</p>
                         <p class="text-slate-700 leading-relaxed mt-1">{{ $complaint->description }}</p>
                     </div>
-                    <div class="grid grid-cols-2 gap-4 pt-4 border-t border-slate-100">
+                        <div class="grid grid-cols-2 gap-4 pt-4 border-t border-slate-100">
                         <div>
                             <p class="text-xs text-slate-500">Dapur MBG</p>
                             <p class="font-medium text-slate-800">{{ $complaint->kitchen?->name ?? '-' }}</p>
@@ -64,11 +64,6 @@
                         <div>
                             <p class="text-xs text-slate-500">Kategori</p>
                             <p class="font-medium text-slate-800">{{ $complaint->category?->name ?? '-' }}</p>
-                        </div>
-                        <div>
-                            <p class="text-xs text-slate-500">Prioritas</p>
-                            <span
-                                class="badge {{ $complaint->priority->bgClass() }}">{{ $complaint->priority->label() }}</span>
                         </div>
                         <div>
                             <p class="text-xs text-slate-500">Tanggal Kirim</p>

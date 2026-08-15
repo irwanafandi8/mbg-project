@@ -30,7 +30,7 @@ class KitchenController extends Controller
 
         $kitchens = $query->latest()->paginate(10)->withQueryString();
 
-        $totalKitchens  = Kitchen::count();
+        $totalKitchens = Kitchen::count();
         $activeKitchens = Kitchen::where('operational_status', 'active')->count();
         $inactiveKitchens = Kitchen::where('operational_status', '!=', 'active')->count();
 
@@ -58,7 +58,7 @@ class KitchenController extends Controller
         $kitchen = Kitchen::create($request->validated());
         AuditLog::log('create_kitchen', Kitchen::class, $kitchen->id, null, $kitchen->toArray());
 
-        return redirect()->route(admin_route_name() . '.kitchens.index')
+        return redirect()->route(admin_route_name().'.kitchens.index')
             ->with('success', 'Dapur MBG berhasil ditambahkan.');
     }
 
@@ -93,19 +93,19 @@ class KitchenController extends Controller
     public function update(Request $request, Kitchen $kitchen): RedirectResponse
     {
         $validated = $request->validate([
-            'name'                => ['required', 'string', 'max:255'],
-            'person_in_charge'    => ['required', 'string', 'max:255'],
-            'address'             => ['required', 'string'],
-            'phone'               => ['nullable', 'string', 'max:20'],
+            'name' => ['required', 'string', 'max:255'],
+            'person_in_charge' => ['required', 'string', 'max:255'],
+            'address' => ['required', 'string'],
+            'phone' => ['nullable', 'string', 'max:20'],
             'production_capacity' => ['required', 'integer', 'min:1'],
-            'operational_status'  => ['required', 'in:active,inactive,maintenance'],
+            'operational_status' => ['required', 'in:active,inactive,maintenance'],
         ]);
 
         $old = $kitchen->toArray();
         $kitchen->update($validated);
         AuditLog::log('update_kitchen', Kitchen::class, $kitchen->id, $old, $kitchen->fresh()->toArray());
 
-        return redirect()->route(admin_route_name() . '.kitchens.index')
+        return redirect()->route(admin_route_name().'.kitchens.index')
             ->with('success', 'Dapur MBG berhasil diperbarui.');
     }
 
@@ -121,7 +121,7 @@ class KitchenController extends Controller
         AuditLog::log('delete_kitchen', Kitchen::class, $kitchen->id, $kitchen->toArray(), null);
         $kitchen->delete();
 
-        return redirect()->route(admin_route_name() . '.kitchens.index')
+        return redirect()->route(admin_route_name().'.kitchens.index')
             ->with('success', 'Dapur MBG berhasil dihapus.');
     }
 }

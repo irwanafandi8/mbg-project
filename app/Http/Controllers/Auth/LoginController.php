@@ -30,10 +30,11 @@ class LoginController extends Controller
      */
     public function login(LoginRequest $request): RedirectResponse
     {
-        $key = 'login.' . $request->ip();
+        $key = 'login.'.$request->ip();
 
         if (RateLimiter::tooManyAttempts($key, 5)) {
             $seconds = RateLimiter::availableIn($key);
+
             return back()->withErrors([
                 'email' => "Terlalu banyak percobaan login. Coba lagi dalam {$seconds} detik.",
             ]);
@@ -41,8 +42,9 @@ class LoginController extends Controller
 
         $credentials = $request->only('email', 'password');
 
-        if (!Auth::attempt($credentials, $request->boolean('remember'))) {
+        if (! Auth::attempt($credentials, $request->boolean('remember'))) {
             RateLimiter::hit($key, 60);
+
             return back()->withErrors([
                 'email' => 'Email atau password tidak sesuai.',
             ])->withInput($request->only('email'));
